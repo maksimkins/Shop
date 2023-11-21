@@ -1,8 +1,14 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using ServerApp.Repositories.EF_Core;
+using SharedProj;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ServerApp.HttpServer;
@@ -10,12 +16,16 @@ namespace ServerApp.HttpServer;
 public class HttpServer  
 {
     private readonly HttpListener listener;
+    private readonly ProductEFCoreRepositories repository;
+
 
     public HttpServer(int port)
     {
         listener = new HttpListener();
         listener.Prefixes.Add($"http://*:{port}/");
         listener.Start();
+
+        repository = new ProductEFCoreRepositories();
     }
 
     public async void HttpListen()
@@ -33,20 +43,185 @@ public class HttpServer
         }
     }
 
-    public async void RequestHandle(HttpListenerContext context)// TO DO
-                                                                // create logic that depends on Request (will check reques method) and call specific method
+    private async void RequestHandle(HttpListenerContext context)
     {
+        Console.WriteLine($"{context.Request.UserHostName} connected to server");
 
-        Console.WriteLine($"{context.User} connected to server");
+        string[]? urlItems = context.Request.RawUrl?.Split('/');
 
-        await ResponseSender(context);
+        if(urlItems is null)
+        {
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 404;
+            await writer.WriteLineAsync($"The requested resource was not found");
+            return;
+        }
+
+
+        if (urlItems.Contains("Product"))
+            await RequestHandleProduct(context, urlItems);
+
+        else
+        {
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 404;
+            await writer.WriteLineAsync($"The requested resource was not found");
+            return;
+        }
+
     }
 
-    public async Task ResponseSender(HttpListenerContext context)// instance of specific method
+    private async Task RequestHandleProduct(HttpListenerContext context, string[] urlItems)// POST, GET, PUT, DELETE
     {
-        using var writer = new StreamWriter(context.Response.OutputStream);
-        context.Response.StatusCode = 200;
-        await writer.WriteLineAsync("you succesfully conected to the server");
+        int id = -1;
+        bool HasId = false;
+
+        foreach(var item in urlItems)
+        {
+            if(int.TryParse(item, out id))
+            {
+                HasId = true;
+                break;
+            }
+        }
+
+        if (HasId && context.Request.HttpMethod == "GET")
+            await RequestGetProduct(context, id);
+
+        else if (HasId && context.Request.HttpMethod == "DELETE")
+            await RequestDeleteProduct(context, id);
+
+        else if (HasId && context.Request.HttpMethod == "PUT")
+            await RequestUpdateProduct(context, id);
+
+        else if (context.Request.HttpMethod == "GET")
+            await RequestGetAllProducts(context);
+
+        else if (context.Request.HttpMethod == "POST")
+            await RequestPostProduct(context);
+
+        else
+        {
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 404;
+            await writer.WriteLineAsync("The requested resource was not found");
+
+            return;
+        }
+
+    }
+
+    private async Task RequestPostProduct(HttpListenerContext context)
+    {
+        try
+        {
+            using var bodyStream = new StreamReader(context.Request.InputStream);
+            string body = bodyStream.ReadToEnd();
+
+            Product product = JsonSerializer.Deserialize<Product>(body)
+                ?? throw new ArgumentNullException("body is corrupted");
+
+            repository.Post(product);
+
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 201;
+            await writer.WriteLineAsync("Posted succesfully");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 400;
+            await writer.WriteLineAsync($"Bad Request (couldn't change product) {ex.Message}");
+        }
+    }
+
+    private async Task RequestGetAllProducts(HttpListenerContext context)
+    {
+        try
+        {
+            IEnumerable<Product> products = repository.GetAll();
+
+            string prods = JsonSerializer.Serialize(products);
+
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 200;
+            await writer.WriteLineAsync(prods);
+
+        }
+        catch (Exception ex)
+        {
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 404;
+            await writer.WriteLineAsync($"The requested resource was not found {ex.Message}");
+        }
+    }
+    private async Task RequestUpdateProduct(HttpListenerContext context, int id)
+    {
+        try
+        {
+            using var bodyStream = new StreamReader(context.Request.InputStream);
+            string body = bodyStream.ReadToEnd();
+
+            Product product = JsonSerializer.Deserialize<Product>(body) 
+                ?? throw new ArgumentNullException("body is corrupted");
+
+            repository.Update(id, product);
+
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 200;
+            await writer.WriteLineAsync("Updated succesfully");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 400;
+            await writer.WriteLineAsync($"Bad Request (couldn't change product) {ex.Message}");
+        }
+    }
+
+    private async Task RequestGetProduct(HttpListenerContext context, int id)
+    {
+        try
+        {
+            Product product = repository.GetById(id);
+            string prod = JsonSerializer.Serialize(product);
+
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 200;
+            await writer.WriteLineAsync(prod);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 400;
+            await writer.WriteLineAsync($"Bad Request (couldn't find product) {ex.Message}");
+        }    
+    }
+
+    private async Task RequestDeleteProduct(HttpListenerContext context, int id)
+    {
+        try
+        {
+            repository.Delete(id);
+
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 200;
+            await writer.WriteLineAsync("Deleted succesfully");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 400;
+            await writer.WriteLineAsync($"Bad Request (couldn't delete product) {ex.Message}");
+        }
     }
 
 }
