@@ -17,12 +17,12 @@ public class ProductEFCoreRepositories : IProductRepository
     {  
         dbcontext = new ProductDbContext(); 
     }
-    public void Delete(int id)
+    public async void Delete(int id)
     {
         Product product = GetById(id);
 
         dbcontext.Remove<Product>(product);
-        dbcontext.SaveChanges();
+        await dbcontext.SaveChangesAsync();
     }
 
     public IEnumerable<Product> GetAll() => dbcontext.Products;
@@ -33,16 +33,16 @@ public class ProductEFCoreRepositories : IProductRepository
             ?? throw new ArgumentNullException("There is no product with such ID");
     }
 
-    public void Post(Product product)
+    public async void Post(Product product)
     {
-        dbcontext.Products.Add(product);
-        dbcontext.SaveChanges();
+        await dbcontext.Products.AddAsync(product);
+        await dbcontext.SaveChangesAsync();
     }
 
-    public void Update(int id, Product product)
+    public async void Update(int id, Product product)
     {
         Product currentProduct = GetById(id);
         currentProduct = product;
-        dbcontext.SaveChanges();
+        await dbcontext.SaveChangesAsync();
     }
 }
