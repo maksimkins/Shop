@@ -3,36 +3,50 @@ using ClientApp.ViewModels.Main;
 using ClientApp.ViewModels.Pages;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using SimpleInjector;
 
 namespace ClientApp
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
+
     public partial class App : Application
     {
+
+        public static Container Container { get; set; } = new Container();
+
         protected override void OnStartup(StartupEventArgs e)
         {
-            this.Start();
+            RegisterContainer();
+            Start<HomeViewModel>();
 
             base.OnStartup(e);
         }
 
-        private void Start()
+        private static void Start<T>() where T : ViewModelBase
         {
-            var mainView = new MainWindow();
-            var mainViewModel = new MainViewModel();
+            var mainView = Container.GetInstance<MainWindow>();
+            var mainViewModel = Container.GetInstance<MainViewModel>();
 
             mainView.DataContext = mainViewModel;
-            mainViewModel.ActiveViewModel = new HomeViewModel();
+            mainViewModel.ActiveViewModel = Container.GetInstance<T>();
 
             mainView.ShowDialog();
+        }
+
+        private static void RegisterContainer()
+        {
+            Container.RegisterSingleton<MainWindow>();
+            Container.RegisterSingleton<MainViewModel>();
+            Container.RegisterSingleton<HomeViewModel>();
+
+            Container.Verify();
         }
     }
 }
