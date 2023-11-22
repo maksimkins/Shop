@@ -1,6 +1,6 @@
 ﻿using ServerApp.Repositories.Base;
 using ServerApp.Repositories.EF_Core.DbContext;
-using SharedProj;
+using SharedProj.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace ServerApp.Repositories.EF_Core;
 
-public class ProductEFCoreRepositories : IProductRepository
+public class ProductEFCoreRepository : IProductRepository
 {
-    private readonly ProductDbContext dbcontext;
+    private readonly ShopDbContext dbcontext;
 
-    public ProductEFCoreRepositories() 
+    public ProductEFCoreRepository() 
     {  
-        dbcontext = new ProductDbContext(); 
+        dbcontext = new ShopDbContext(); 
     }
     public async void Delete(int id)
     {

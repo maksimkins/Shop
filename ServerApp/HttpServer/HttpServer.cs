@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ServerApp.Repositories.EF_Core;
 using SharedProj;
+using SharedProj.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -16,7 +17,7 @@ namespace ServerApp.HttpServer;
 public class HttpServer  
 {
     private readonly HttpListener listener;
-    private readonly ProductEFCoreRepositories repository;
+    private readonly ProductEFCoreRepository repository;
 
 
     public HttpServer(int port)
@@ -25,22 +26,23 @@ public class HttpServer
         listener.Prefixes.Add($"http://*:{port}/");
         listener.Start();
 
-        repository = new ProductEFCoreRepositories();
+        repository = new ProductEFCoreRepository();
+        Console.WriteLine($"server started on port: {port}");
     }
 
     public async void HttpListen()
     {
-        while (true)
+        
+        
+        HttpListenerContext context = await listener.GetContextAsync();
+
+        if (context is null)
         {
-            HttpListenerContext context = await listener.GetContextAsync();
-
-            if (context is null)
-            {
-                break;
-            }
-
-            RequestHandle(context);
+            return;
         }
+
+        RequestHandle(context);
+        
     }
 
     private async void RequestHandle(HttpListenerContext context)
@@ -76,14 +78,14 @@ public class HttpServer
         int id = -1;
         bool HasId = false;
 
-        foreach(var item in urlItems)
+
+        string? item = urlItems.LastOrDefault();
+
+        if (item is null || int.TryParse(item, out id))
         {
-            if(int.TryParse(item, out id))
-            {
-                HasId = true;
-                break;
-            }
+            HasId = true;
         }
+        
 
         if (HasId && context.Request.HttpMethod == "GET")
             await RequestGetProduct(context, id);
@@ -115,6 +117,7 @@ public class HttpServer
     {
         try
         {
+            context.Response.ContentType = "application/json";
             using var bodyStream = new StreamReader(context.Request.InputStream);
             string body = bodyStream.ReadToEnd();
 
@@ -141,6 +144,8 @@ public class HttpServer
     {
         try
         {
+            context.Response.ContentType = "application/json";
+
             IEnumerable<Product> products = repository.GetAll();
 
             string prods = JsonSerializer.Serialize(products);
@@ -161,6 +166,8 @@ public class HttpServer
     {
         try
         {
+            context.Response.ContentType = "application/json";
+
             using var bodyStream = new StreamReader(context.Request.InputStream);
             string body = bodyStream.ReadToEnd();
 
@@ -187,6 +194,8 @@ public class HttpServer
     {
         try
         {
+            context.Response.ContentType = "application/json";
+
             Product product = repository.GetById(id);
             string prod = JsonSerializer.Serialize(product);
 
@@ -208,6 +217,8 @@ public class HttpServer
     {
         try
         {
+            context.Response.ContentType = "application/json";
+
             repository.Delete(id);
 
             using var writer = new StreamWriter(context.Response.OutputStream);

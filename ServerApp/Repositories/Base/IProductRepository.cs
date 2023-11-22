@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServerApp.Repositories.Base;
 
-using SharedProj;
+using SharedProj.Models;
 
 public interface IProductRepository
 {
