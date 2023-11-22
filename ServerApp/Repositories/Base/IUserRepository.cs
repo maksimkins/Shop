@@ -9,6 +9,6 @@ namespace ServerApp.Repositories.Base;
 
 public interface IUserRepository
 {
-    public bool IsRegistered(string login, string password);
-    public void Register(User user);
+    public bool IsRegistered(User user);
+    public void Post(User user);
 }

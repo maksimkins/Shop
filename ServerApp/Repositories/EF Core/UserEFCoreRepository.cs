@@ -17,12 +17,12 @@ public class UserEFCoreRepository : IUserRepository
     {
         dbcontext = new ShopDbContext();
     }
-    public bool IsRegistered(string login, string password)
+    public bool IsRegistered(User user)
     {
-        return dbcontext.Users.Any(u => u.Login == login && u.Password == password);
+        return dbcontext.Users.Any(u => u.Login == user.Login && u.Password == user.Password);
     }
 
-    public async void Register(User user)
+    public async void Post(User user)
     {
         await dbcontext.Users.AddAsync(user);
         await dbcontext.SaveChangesAsync();
