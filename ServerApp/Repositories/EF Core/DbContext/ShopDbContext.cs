@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 namespace ServerApp.Repositories.EF_Core.DbContext;
 
 using Microsoft.EntityFrameworkCore;
-using SharedProj;
+using SharedProj.Models;
 
-public class ProductDbContext : DbContext
+public class ShopDbContext : DbContext
 {
     public DbSet<Product> Products { get; set; }
+    public DbSet<User> Users { get; set; }
 
     //public ProductDbContext()
     //{
@@ -26,6 +27,10 @@ public class ProductDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Login)
+            .IsUnique();
+
         base.OnModelCreating(modelBuilder);
     }
 }
