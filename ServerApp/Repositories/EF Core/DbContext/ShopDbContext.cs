@@ -27,6 +27,10 @@ public class ShopDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Login)
+            .IsUnique();
+
         base.OnModelCreating(modelBuilder);
     }
 }

@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace ServerApp.Repositories.EF_Core;
 
-public class ProductEFCoreRepositories : IProductRepository
+public class ProductEFCoreRepository : IProductRepository
 {
     private readonly ShopDbContext dbcontext;
 
-    public ProductEFCoreRepositories() 
+    public ProductEFCoreRepository() 
     {  
         dbcontext = new ShopDbContext(); 
     }
