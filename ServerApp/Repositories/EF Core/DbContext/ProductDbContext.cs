@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ServerApp.Repositories.EF_Core.DbContext;
 
 using Microsoft.EntityFrameworkCore;
-using SharedProj;
+using SharedProj.Models;
 
 public class ProductDbContext : DbContext
 {

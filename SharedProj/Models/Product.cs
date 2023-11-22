@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SharedProj;
+namespace SharedProj.Models;
 
 public class Product
 {

@@ -1,6 +1,6 @@
 ﻿using ServerApp.Repositories.Base;
 using ServerApp.Repositories.EF_Core.DbContext;
-using SharedProj;
+using SharedProj.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
