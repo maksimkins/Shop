@@ -276,7 +276,7 @@ public class HttpServer
             User user = JsonSerializer.Deserialize<User>(body)
                 ?? throw new ArgumentNullException("body is corrupted");
 
-            userRepository.Register(user);
+            userRepository.Post(user);
 
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 201;
@@ -295,25 +295,31 @@ public class HttpServer
 
     private async Task RequestGetUser(HttpListenerContext context)
     {
-        //try
-        //{
-        //    context.Response.ContentType = "application/json";
+        try
+        {
+            context.Response.ContentType = "application/json";
 
-        //    User user = userRepository.f(id);
-        //    string prod = JsonSerializer.Serialize(product);
+            using var bodyStream = new StreamReader(context.Request.InputStream);
+            string body = bodyStream.ReadToEnd();
 
-        //    using var writer = new StreamWriter(context.Response.OutputStream);
-        //    context.Response.StatusCode = 200;
-        //    await writer.WriteLineAsync(prod);
-        //}
-        //catch (Exception ex)
-        //{
-        //    Console.WriteLine(ex.Message);
+            User user = JsonSerializer.Deserialize<User>(body)
+                ?? throw new ArgumentNullException("body is corrupted");
 
-        //    using var writer = new StreamWriter(context.Response.OutputStream);
-        //    context.Response.StatusCode = 400;
-        //    await writer.WriteLineAsync($"Bad Request (couldn't find user) {ex.Message}");
-        //}
+            bool isRegistered = userRepository.IsRegistered(user);
+            string isregistered = JsonSerializer.Serialize(isRegistered);
+
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 200;
+            await writer.WriteLineAsync(isregistered);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 400;
+            await writer.WriteLineAsync($"Bad Request (couldn't find user) {ex.Message}");
+        }
     }
 
     #endregion
