@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ServerApp.Repositories.EF_Core;
 using SharedProj;
+using SharedProj.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -16,7 +17,7 @@ namespace ServerApp.HttpServer;
 public class HttpServer  
 {
     private readonly HttpListener listener;
-    private readonly ProductEFCoreRepositories repository;
+    private readonly ProductEFCoreRepository repository;
 
 
     public HttpServer(int port)
@@ -25,7 +26,7 @@ public class HttpServer
         listener.Prefixes.Add($"http://*:{port}/");
         listener.Start();
 
-        repository = new ProductEFCoreRepositories();
+        repository = new ProductEFCoreRepository();
         Console.WriteLine($"server started on port: {port}");
     }
 
