@@ -11,7 +11,7 @@ using ServerApp.Repositories.EF_Core.DbContext;
 
 namespace ServerApp.Migrations
 {
-    [DbContext(typeof(ProductDbContext))]
+    [DbContext(typeof(ShopDbContext))]
     [Migration("20231120223109_init")]
     partial class init
     {

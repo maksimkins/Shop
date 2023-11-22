@@ -10,7 +10,7 @@ using ServerApp.Repositories.EF_Core.DbContext;
 
 namespace ServerApp.Migrations
 {
-    [DbContext(typeof(ProductDbContext))]
+    [DbContext(typeof(ShopDbContext))]
     partial class ProductDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

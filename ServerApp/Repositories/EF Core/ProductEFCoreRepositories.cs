@@ -11,11 +11,11 @@ namespace ServerApp.Repositories.EF_Core;
 
 public class ProductEFCoreRepositories : IProductRepository
 {
-    private readonly ProductDbContext dbcontext;
+    private readonly ShopDbContext dbcontext;
 
     public ProductEFCoreRepositories() 
     {  
-        dbcontext = new ProductDbContext(); 
+        dbcontext = new ShopDbContext(); 
     }
     public async void Delete(int id)
     {

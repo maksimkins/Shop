@@ -9,9 +9,10 @@ namespace ServerApp.Repositories.EF_Core.DbContext;
 using Microsoft.EntityFrameworkCore;
 using SharedProj.Models;
 
-public class ProductDbContext : DbContext
+public class ShopDbContext : DbContext
 {
     public DbSet<Product> Products { get; set; }
+    public DbSet<User> Users { get; set; }
 
     //public ProductDbContext()
     //{
