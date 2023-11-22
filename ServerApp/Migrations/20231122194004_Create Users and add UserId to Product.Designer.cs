@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServerApp.Repositories.EF_Core.DbContext;
 
@@ -11,9 +12,11 @@ using ServerApp.Repositories.EF_Core.DbContext;
 namespace ServerApp.Migrations
 {
     [DbContext(typeof(ShopDbContext))]
-    partial class ProductDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231122194004_Create Users and add UserId to Product")]
+    partial class CreateUsersandaddUserIdtoProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

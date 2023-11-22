@@ -11,4 +11,7 @@ public class Product
     public string Text { get; set; }
     public DateTime CreationalDate { get; set; }
     public double Price { get; set; }
+
+    public int UserId { get; set; }
+    public User User { get; set; }
 }
