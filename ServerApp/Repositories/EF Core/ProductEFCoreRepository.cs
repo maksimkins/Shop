@@ -42,7 +42,11 @@ public class ProductEFCoreRepository : IProductRepository
     public async void Update(int id, Product product)
     {
         Product currentProduct = GetById(id);
-        currentProduct = product;
+
+        currentProduct.Text = product.Text;
+        currentProduct.Price = product.Price;
+        currentProduct.Title = product.Title;
+
         await dbcontext.SaveChangesAsync();
     }
 }
