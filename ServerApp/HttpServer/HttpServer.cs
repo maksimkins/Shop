@@ -35,11 +35,9 @@ public class HttpServer
         Console.WriteLine($"server started on port: {port}");
     }
 
-    public async void HttpListen()
+    public void HttpListen()
     {
-        
-        
-        HttpListenerContext context = await listener.GetContextAsync();
+        HttpListenerContext context = listener.GetContext();
 
         if (context is null)
         {
