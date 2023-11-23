@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace ServerApp.HttpServer.RequestHandlers.ProductHandlers;
+namespace ServerApp.HttpServer.RequestHandlers.ProductHandlers.ProductMethodHandlers;
 
 public class ProductPostHandler : IRequestHandler
 {

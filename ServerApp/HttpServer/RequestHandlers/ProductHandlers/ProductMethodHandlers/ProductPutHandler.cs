@@ -1,5 +1,4 @@
 ﻿using ServerApp.HttpServer.RequestHandlers.Base;
-using ServerApp.Repositories.Base;
 using ServerApp.Repositories.EF_Core;
 using SharedProj.Models;
 using System;
@@ -10,16 +9,16 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace ServerApp.HttpServer.RequestHandlers.ProductHandlers;
+namespace ServerApp.HttpServer.RequestHandlers.ProductHandlers.ProductMethodHandlers;
 
-public class ProductGetHandler : IRequestHandler
+public class ProductPutHandler : IRequestHandler
 {
     private readonly ProductEFCoreRepository productRepository;
-
-    public ProductGetHandler()
+    public ProductPutHandler()
     {
         productRepository = new ProductEFCoreRepository();
     }
+
     public async void RequestHandle(HttpListenerContext context)
     {
         int id = -1;
@@ -35,53 +34,36 @@ public class ProductGetHandler : IRequestHandler
 
         if (HasId)
         {
-            await RequestGetProduct(context, id);
+            await RequestPutProduct(context, id);
         }
 
         else
         {
-            await RequestGetAllProducts(context);
-        }
-
-    }
-
-    private async Task RequestGetAllProducts(HttpListenerContext context)
-    {
-        try
-        {
-            context.Response.ContentType = "application/json";
-
-            IEnumerable<Product> products = productRepository.GetAll();
-
-            string prods = JsonSerializer.Serialize(products);
-
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 200;
-            await writer.WriteLineAsync(prods);
-
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 404;
-            await writer.WriteLineAsync($"error in getting all products{ex.Message}");
-        }
-    }
+            await writer.WriteLineAsync("Wrong endpoint");
 
-    private async Task RequestGetProduct(HttpListenerContext context, int id)
+            return;
+        }
+
+    }
+    private async Task RequestPutProduct(HttpListenerContext context, int id)
     {
         try
         {
             context.Response.ContentType = "application/json";
 
-            Product product = productRepository.GetById(id);
-            string prod = JsonSerializer.Serialize(product);
+            using var bodyStream = new StreamReader(context.Request.InputStream);
+            string body = bodyStream.ReadToEnd();
+
+            Product product = JsonSerializer.Deserialize<Product>(body)
+                ?? throw new ArgumentNullException("body of product request is corrupted");
+
+            productRepository.Update(id, product);
 
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 200;
-            await writer.WriteLineAsync(prod);
+            await writer.WriteLineAsync("product updated succesfully");
         }
         catch (Exception ex)
         {
@@ -89,8 +71,7 @@ public class ProductGetHandler : IRequestHandler
 
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 400;
-            await writer.WriteLineAsync($"Bad Request (couldn't find product) {ex.Message}");
+            await writer.WriteLineAsync($"Bad Request (couldn't change product) {ex.Message}");
         }
     }
-
 }

@@ -1,24 +1,22 @@
 ﻿using ServerApp.HttpServer.RequestHandlers.Base;
+using ServerApp.Repositories.Base;
 using ServerApp.Repositories.EF_Core;
-using SharedProj.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace ServerApp.HttpServer.RequestHandlers.ProductHandlers;
+namespace ServerApp.HttpServer.RequestHandlers.ProductHandlers.ProductMethodHandlers;
 
-public class ProductPutHandler : IRequestHandler
+public class ProductDeleteHandler : IRequestHandler
 {
     private readonly ProductEFCoreRepository productRepository;
-    public ProductPutHandler()
+    public ProductDeleteHandler()
     {
         productRepository = new ProductEFCoreRepository();
     }
-
     public async void RequestHandle(HttpListenerContext context)
     {
         int id = -1;
@@ -34,7 +32,7 @@ public class ProductPutHandler : IRequestHandler
 
         if (HasId)
         {
-            await RequestPutProduct(context, id);
+            await RequestDeleteProduct(context, id);
         }
 
         else
@@ -45,25 +43,19 @@ public class ProductPutHandler : IRequestHandler
 
             return;
         }
-
     }
-    private async Task RequestPutProduct(HttpListenerContext context, int id)
+
+    private async Task RequestDeleteProduct(HttpListenerContext context, int id)
     {
         try
         {
             context.Response.ContentType = "application/json";
 
-            using var bodyStream = new StreamReader(context.Request.InputStream);
-            string body = bodyStream.ReadToEnd();
-
-            Product product = JsonSerializer.Deserialize<Product>(body)
-                ?? throw new ArgumentNullException("body of product request is corrupted");
-
-            productRepository.Update(id, product);
+            productRepository.Delete(id);
 
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 200;
-            await writer.WriteLineAsync("product updated succesfully");
+            await writer.WriteLineAsync("product deleted succesfully");
         }
         catch (Exception ex)
         {
@@ -71,7 +63,7 @@ public class ProductPutHandler : IRequestHandler
 
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 400;
-            await writer.WriteLineAsync($"Bad Request (couldn't change product) {ex.Message}");
+            await writer.WriteLineAsync($"Bad Request (couldn't delete product) {ex.Message}");
         }
     }
 }
