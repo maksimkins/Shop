@@ -1,22 +1,19 @@
 ﻿using ServerApp.HttpServer.RequestHandlers.Base;
 using ServerApp.Repositories.Base;
 using ServerApp.Repositories.EF_Core;
-using SharedProj.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ServerApp.HttpServer.RequestHandlers.ProductHandlers;
 
-public class ProductGetHandler : IRequestHandler
+public class ProductDeleteHandler : IRequestHandler
 {
     private readonly ProductEFCoreRepository productRepository;
-
-    public ProductGetHandler()
+    public ProductDeleteHandler()
     {
         productRepository = new ProductEFCoreRepository();
     }
@@ -35,53 +32,30 @@ public class ProductGetHandler : IRequestHandler
 
         if (HasId)
         {
-            await RequestGetProduct(context, id);
+            await RequestDeleteProduct(context, id);
         }
 
         else
         {
-            await RequestGetAllProducts(context);
-        }
-
-    }
-
-    private async Task RequestGetAllProducts(HttpListenerContext context)
-    {
-        try
-        {
-            context.Response.ContentType = "application/json";
-
-            IEnumerable<Product> products = productRepository.GetAll();
-
-            string prods = JsonSerializer.Serialize(products);
-
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 200;
-            await writer.WriteLineAsync(prods);
-
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 404;
-            await writer.WriteLineAsync($"error in getting all products{ex.Message}");
+            await writer.WriteLineAsync("Wrong endpoint");
+
+            return;
         }
     }
 
-    private async Task RequestGetProduct(HttpListenerContext context, int id)
+    private async Task RequestDeleteProduct(HttpListenerContext context, int id)
     {
         try
         {
             context.Response.ContentType = "application/json";
 
-            Product product = productRepository.GetById(id);
-            string prod = JsonSerializer.Serialize(product);
+            productRepository.Delete(id);
 
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 200;
-            await writer.WriteLineAsync(prod);
+            await writer.WriteLineAsync("product deleted succesfully");
         }
         catch (Exception ex)
         {
@@ -89,8 +63,7 @@ public class ProductGetHandler : IRequestHandler
 
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 400;
-            await writer.WriteLineAsync($"Bad Request (couldn't find product) {ex.Message}");
+            await writer.WriteLineAsync($"Bad Request (couldn't delete product) {ex.Message}");
         }
     }
-
 }
