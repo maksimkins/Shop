@@ -14,4 +14,9 @@ public class Product
 
     public int UserId { get; set; }
     public User User { get; set; }
+
+    public Product()
+    {
+        CreationalDate = DateTime.Now;
+    }
 }
