@@ -1,5 +1,6 @@
 ﻿using ServerApp.HttpServer.RequestHandlers.Base;
 using ServerApp.HttpServer.RequestHandlers.ProductHandlers.ProductMethodHandlers;
+using ServerApp.HttpServer.RequestHandlers.UserHandlers.UserMethodHandlers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +39,7 @@ public class UserHandler : IRequestHandler
         {
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 404;
-            await writer.WriteLineAsync("Wrong endpoint");
+            await writer.WriteLineAsync("Wrong endpoint (UserHandler)");
 
             return;
         }

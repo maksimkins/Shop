@@ -54,7 +54,7 @@ public class ProductHandler : IRequestHandler
         {
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 404;
-            await writer.WriteLineAsync("Wrong endpoint");
+            await writer.WriteLineAsync("Wrong endpoint (ProductHandler)");
 
             return;
         }
