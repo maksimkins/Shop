@@ -72,7 +72,7 @@ public class HttpServer
         {
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 404;
-            await writer.WriteLineAsync($"The requested resource was not found");
+            await writer.WriteLineAsync($"endpoint not contains Product or User");
             return;
         }
 
@@ -112,7 +112,7 @@ public class HttpServer
         {
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 404;
-            await writer.WriteLineAsync("The requested resource was not found");
+            await writer.WriteLineAsync("Wrong endpoint");
 
             return;
         }
@@ -128,7 +128,7 @@ public class HttpServer
             string body = bodyStream.ReadToEnd();
 
             Product product = JsonSerializer.Deserialize<Product>(body)
-                ?? throw new ArgumentNullException("body is corrupted");
+                ?? throw new ArgumentNullException("body of product request is corrupted");
 
             productRepository.Post(product);
 
@@ -161,13 +161,21 @@ public class HttpServer
             await writer.WriteLineAsync(prods);
 
         }
+        //catch (Jso)
+        //{
+        //    string prods = "[]";
+
+        //    using var writer = new StreamWriter(context.Response.OutputStream);
+        //    context.Response.StatusCode = 200;
+        //    await writer.WriteLineAsync(prods);
+        //}
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
 
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 404;
-            await writer.WriteLineAsync($"The requested resource was not found {ex.Message}");
+            await writer.WriteLineAsync($"error in getting all products{ex.Message}");
         }
     }
     private async Task RequestUpdateProduct(HttpListenerContext context, int id)
@@ -180,7 +188,7 @@ public class HttpServer
             string body = bodyStream.ReadToEnd();
 
             Product product = JsonSerializer.Deserialize<Product>(body) 
-                ?? throw new ArgumentNullException("body is corrupted");
+                ?? throw new ArgumentNullException("body of product request is corrupted");
 
             productRepository.Update(id, product);
 
@@ -256,7 +264,7 @@ public class HttpServer
         {
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 404;
-            await writer.WriteLineAsync("The requested resource was not found");
+            await writer.WriteLineAsync("Wrong endpoint");
 
             return;
         }
@@ -272,7 +280,7 @@ public class HttpServer
             string body = bodyStream.ReadToEnd();
 
             User user = JsonSerializer.Deserialize<User>(body)
-                ?? throw new ArgumentNullException("body is corrupted");
+                ?? throw new ArgumentNullException("body of user request is corrupted");
 
             userRepository.Post(user);
 
@@ -301,7 +309,7 @@ public class HttpServer
             string body = bodyStream.ReadToEnd();
 
             User user = JsonSerializer.Deserialize<User>(body)
-                ?? throw new ArgumentNullException("body is corrupted");
+                ?? throw new ArgumentNullException("body of user request is corrupted");
 
             bool isRegistered = userRepository.IsRegistered(user);
             string isregistered = JsonSerializer.Serialize(isRegistered);
