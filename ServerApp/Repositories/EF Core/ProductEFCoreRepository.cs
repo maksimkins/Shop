@@ -47,6 +47,8 @@ public class ProductEFCoreRepository : IProductRepository
         currentProduct.Price = product.Price;
         currentProduct.Title = product.Title;
 
+        currentProduct.CreationalDate = DateTime.Now;
+
         await dbcontext.SaveChangesAsync();
     }
 }
