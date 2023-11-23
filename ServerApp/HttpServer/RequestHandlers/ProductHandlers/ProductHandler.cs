@@ -17,48 +17,48 @@ public class ProductHandler : IRequestHandler
     private IRequestHandler? productDeleteHandler;
     public async void RequestHandle(HttpListenerContext context)
     {
+        
+        string[]? urlItems = context.Request.RawUrl?.Split('/');
+
+        string? item = urlItems?.LastOrDefault();
+
+        if (context.Request.HttpMethod == HttpMethod.Get.Method)
         {
-            string[]? urlItems = context.Request.RawUrl?.Split('/');
-
-            string? item = urlItems?.LastOrDefault();
-
-            if (context.Request.HttpMethod == HttpMethod.Get.Method)
-            {
-                productGetHandler = new ProductGetHandler();
-                productGetHandler.RequestHandle(context);
-            }
-
-
-            else if (context.Request.HttpMethod == HttpMethod.Delete.Method)
-            {
-                productDeleteHandler = new ProductDeleteHandler();
-                productDeleteHandler.RequestHandle(context);
-            }
-
-
-            else if (context.Request.HttpMethod == HttpMethod.Put.Method)
-            {
-                productPutHandler = new ProductPutHandler();
-                productPutHandler.RequestHandle(context);
-            }
-           
-
-            else if (context.Request.HttpMethod == HttpMethod.Post.Method)
-            {
-                productPostHandler = new ProductPostHandler();
-                productPostHandler.RequestHandle(context);
-            }
-                
-
-            else
-            {
-                using var writer = new StreamWriter(context.Response.OutputStream);
-                context.Response.StatusCode = 404;
-                await writer.WriteLineAsync("Wrong endpoint");
-
-                return;
-            }
-
+            productGetHandler = new ProductGetHandler();
+            productGetHandler.RequestHandle(context);
         }
+
+
+        else if (context.Request.HttpMethod == HttpMethod.Delete.Method)
+        {
+            productDeleteHandler = new ProductDeleteHandler();
+            productDeleteHandler.RequestHandle(context);
+        }
+
+
+        else if (context.Request.HttpMethod == HttpMethod.Put.Method)
+        {
+            productPutHandler = new ProductPutHandler();
+            productPutHandler.RequestHandle(context);
+        }
+       
+
+        else if (context.Request.HttpMethod == HttpMethod.Post.Method)
+        {
+            productPostHandler = new ProductPostHandler();
+            productPostHandler.RequestHandle(context);
+        }
+            
+
+        else
+        {
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 404;
+            await writer.WriteLineAsync("Wrong endpoint");
+
+            return;
+        }
+
     }
+    
 }
