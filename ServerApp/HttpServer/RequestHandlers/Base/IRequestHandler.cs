@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace ServerApp.HttpServer.RequestHandlers.Base;
 
-public interface IHttpRequestHandler
+public interface IRequestHandler
 {
-    public void SetNextHandler(IHttpRequestHandler requestHandler);
     public void RequestHandle(HttpListenerContext context);
 }

@@ -15,12 +15,18 @@ using System.Threading.Tasks;
 
 namespace ServerApp.HttpServer;
 
+using RequestHandlers.Base;
+using ServerApp.HttpServer.RequestHandlers.ProductHandlers;
+
 public class HttpServer  
 {
     private readonly HttpListener listener;
 
     private readonly ProductEFCoreRepository productRepository;
     private readonly UserEFCoreRepository userRepository;
+
+    private IRequestHandler? productHandler;
+    private IRequestHandler? userHandler;
 
 
     public HttpServer(int port)
@@ -64,9 +70,19 @@ public class HttpServer
 
 
         if (urlItems.Contains("Product"))
-            await RequestHandleProduct(context, urlItems);
+        {
+            productHandler = new ProductHandler();
+            productHandler.RequestHandle(context);
+        }
+            
+        //await RequestHandleProduct(context, urlItems);
         else if (urlItems.Contains("User"))
-            await RequestHandleUser(context, urlItems);
+        {
+            userHandler = new UserHandler();
+            userHandler.RequestHandle(context);
+        }
+        
+        //await RequestHandleUser(context, urlItems);
 
         else
         {
