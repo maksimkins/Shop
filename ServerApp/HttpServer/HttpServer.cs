@@ -93,19 +93,19 @@ public class HttpServer
         }
         
 
-        if (HasId && context.Request.HttpMethod == "GET")
+        if (HasId && context.Request.HttpMethod == HttpMethod.Get.Method)
             await RequestGetProduct(context, id);
 
-        else if (HasId && context.Request.HttpMethod == "DELETE")
+        else if (HasId && context.Request.HttpMethod == HttpMethod.Delete.Method)
             await RequestDeleteProduct(context, id);
 
-        else if (HasId && context.Request.HttpMethod == "PUT")
-            await RequestUpdateProduct(context, id);
+        else if (HasId && context.Request.HttpMethod == HttpMethod.Put.Method)
+            await RequestPutProduct(context, id);
 
-        else if (context.Request.HttpMethod == "GET")
+        else if (context.Request.HttpMethod == HttpMethod.Get.Method)
             await RequestGetAllProducts(context);
 
-        else if (context.Request.HttpMethod == "POST")
+        else if (context.Request.HttpMethod == HttpMethod.Post.Method)
             await RequestPostProduct(context);
 
         else
@@ -178,7 +178,7 @@ public class HttpServer
             await writer.WriteLineAsync($"error in getting all products{ex.Message}");
         }
     }
-    private async Task RequestUpdateProduct(HttpListenerContext context, int id)
+    private async Task RequestPutProduct(HttpListenerContext context, int id)
     {
         try
         {
@@ -256,9 +256,9 @@ public class HttpServer
 
     private async Task RequestHandleUser(HttpListenerContext context, string[] urlItems)
     {
-        if (context.Request.HttpMethod == "POST")
+        if (context.Request.HttpMethod == HttpMethod.Post.Method)
             await RequestPostUser(context);
-        else if(context.Request.HttpMethod == "GET")
+        else if(context.Request.HttpMethod == HttpMethod.Get.Method)
             await RequestGetUser(context);
         else
         {
