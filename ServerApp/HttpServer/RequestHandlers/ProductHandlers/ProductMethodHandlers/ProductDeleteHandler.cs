@@ -1,6 +1,7 @@
 ﻿using ServerApp.HttpServer.RequestHandlers.Base;
 using ServerApp.Repositories.Base;
 using ServerApp.Repositories.EF_Core;
+using ServerApp.Repositories.Logic_Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,10 @@ namespace ServerApp.HttpServer.RequestHandlers.ProductHandlers.ProductMethodHand
 
 public class ProductDeleteHandler : IRequestHandler
 {
-    private readonly ProductEFCoreRepository productRepository;
+    private readonly ProductLogic productLogic;
     public ProductDeleteHandler()
     {
-        productRepository = new ProductEFCoreRepository();
+        productLogic = new ProductLogic(new ProductEFCoreRepository());
     }
     public async void RequestHandle(HttpListenerContext context)
     {
@@ -51,7 +52,7 @@ public class ProductDeleteHandler : IRequestHandler
         {
             context.Response.ContentType = "application/json";
 
-            productRepository.Delete(id);
+            productLogic.Delete(id);
 
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 200;
