@@ -25,7 +25,7 @@ public class ProductEFCoreRepository : IProductRepository
         await dbcontext.SaveChangesAsync();
     }
 
-    public IEnumerable<Product> GetAll() => dbcontext.Products;
+    public IQueryable<Product> GetAll() => dbcontext.Products.AsQueryable<Product>();
 
     public Product GetById(int id)
     {
@@ -41,14 +41,12 @@ public class ProductEFCoreRepository : IProductRepository
 
     public async void Update(int id, Product product)
     {
-        Product currentProduct = GetById(id);
-
-        currentProduct.Text = product.Text;
-        currentProduct.Price = product.Price;
-        currentProduct.Title = product.Title;
-
-        currentProduct.CreationalDate = DateTime.Now;
-
+        dbcontext.Products.Update(product);
         await dbcontext.SaveChangesAsync();
+    }
+
+    public IQueryable<Product> GetAllByUserId(int id)
+    {
+        return dbcontext.Products.Where(p => p.UserId == id);
     }
 }
