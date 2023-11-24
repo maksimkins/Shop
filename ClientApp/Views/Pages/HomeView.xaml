@@ -6,7 +6,36 @@
              xmlns:local="clr-namespace:ClientApp.Views.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="CadetBlue">
-        <Label>Home ViewModel</Label>
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Styles/Buttons/ButtonStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="White">
+        <DockPanel>
+
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Height="75" Background="	#36454F">
+                <Button DockPanel.Dock="Right" Style="{StaticResource nav_btn}" Content="Test"/>
+                <Button Style="{StaticResource nav_btn}" Content="test2"/>
+            </StackPanel>
+            
+
+            <ListView ItemsSource="{Binding Products}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel TextBlock.FontSize="13px" Margin="5px">
+                            <TextBlock Text="{Binding Title}"/>
+                            <TextBlock Text="{Binding Text}"/>
+                            <TextBlock Text="{Binding Price}"/>
+                            <TextBlock Text="{Binding CreationDate}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </DockPanel>
     </Grid>
 </UserControl>

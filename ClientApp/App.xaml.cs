@@ -9,6 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using SimpleInjector;
+using System.Net.Http;
+using ClientApp.Utilities.MyHttpClient;
 
 namespace ClientApp
 {
@@ -42,6 +44,8 @@ namespace ClientApp
 
         private static void RegisterContainer()
         {
+            Container.RegisterSingleton<MyHttpClient>();
+
             Container.RegisterSingleton<MainWindow>();
             Container.RegisterSingleton<MainViewModel>();
             Container.RegisterSingleton<HomeViewModel>();
