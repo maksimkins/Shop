@@ -27,4 +27,10 @@ public class UserEFCoreRepository : IUserRepository
         await dbcontext.Users.AddAsync(user);
         await dbcontext.SaveChangesAsync();
     }
+
+    public async void Update(User user)
+    {
+        dbcontext.Users.Update(user);
+        await dbcontext.SaveChangesAsync();
+    }
 }
