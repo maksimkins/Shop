@@ -1,5 +1,6 @@
 ﻿using ServerApp.HttpServer.RequestHandlers.Base;
 using ServerApp.Repositories.EF_Core;
+using ServerApp.Repositories.Logic_Classes;
 using SharedProj.Models;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,10 @@ namespace ServerApp.HttpServer.RequestHandlers.ProductHandlers.ProductMethodHand
 
 public class ProductPutHandler : IRequestHandler
 {
-    private readonly ProductEFCoreRepository productRepository;
+    private readonly ProductLogic productLogic;
     public ProductPutHandler()
     {
-        productRepository = new ProductEFCoreRepository();
+        productLogic = new ProductLogic(new ProductEFCoreRepository());
     }
 
     public async void RequestHandle(HttpListenerContext context)
@@ -59,7 +60,7 @@ public class ProductPutHandler : IRequestHandler
             Product product = JsonSerializer.Deserialize<Product>(body)
                 ?? throw new ArgumentNullException("body of product request is corrupted");
 
-            productRepository.Update(id, product);
+            productLogic.Update(id, product);
 
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 200;
