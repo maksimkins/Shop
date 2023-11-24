@@ -15,12 +15,19 @@ using System.Threading.Tasks;
 
 namespace ServerApp.HttpServer;
 
+using RequestHandlers.Base;
+using ServerApp.HttpServer.RequestHandlers.ProductHandlers;
+using ServerApp.HttpServer.RequestHandlers.UserHandlers;
+
 public class HttpServer  
 {
     private readonly HttpListener listener;
 
-    private readonly ProductEFCoreRepository productRepository;
-    private readonly UserEFCoreRepository userRepository;
+    //private readonly ProductEFCoreRepository productRepository;
+    //private readonly UserEFCoreRepository userRepository;
+
+    private IRequestHandler? productHandler;
+    private IRequestHandler? userHandler;
 
 
     public HttpServer(int port)
@@ -29,8 +36,11 @@ public class HttpServer
         listener.Prefixes.Add($"http://*:{port}/");
         listener.Start();
 
-        productRepository = new ProductEFCoreRepository();
-        userRepository = new UserEFCoreRepository();
+        //productRepository = new ProductEFCoreRepository();
+        //userRepository = new UserEFCoreRepository();
+
+        userHandler = new UserHandler();
+        productHandler = new ProductHandler();
 
         Console.WriteLine($"server started on port: {port}");
     }
@@ -58,275 +68,273 @@ public class HttpServer
         {
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 404;
-            await writer.WriteLineAsync($"The requested resource was not found");
+            await writer.WriteLineAsync($"The requested resource was not found (HttpServer)");
             return;
         }
 
 
         if (urlItems.Contains("Product"))
-            await RequestHandleProduct(context, urlItems);
-        else if (urlItems.Contains("User"))
-            await RequestHandleUser(context, urlItems);
-
-        else
         {
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 404;
-            await writer.WriteLineAsync($"endpoint not contains Product or User");
-            return;
+            productHandler?.RequestHandle(context);
         }
-
-    }
-
-    #region Request handlers for products
-    private async Task RequestHandleProduct(HttpListenerContext context, string[] urlItems)// POST, GET, PUT, DELETE
-    {
-        int id = -1;
-        bool HasId = false;
-
-
-        string? item = urlItems.LastOrDefault();
-
-        if (item is null || int.TryParse(item, out id))
+            
+        else if (urlItems.Contains("User"))
         {
-            HasId = true;
+            userHandler?.RequestHandle(context);
         }
         
 
-        if (HasId && context.Request.HttpMethod == HttpMethod.Get.Method)
-            await RequestGetProduct(context, id);
-
-        else if (HasId && context.Request.HttpMethod == HttpMethod.Delete.Method)
-            await RequestDeleteProduct(context, id);
-
-        else if (HasId && context.Request.HttpMethod == HttpMethod.Put.Method)
-            await RequestPutProduct(context, id);
-
-        else if (context.Request.HttpMethod == HttpMethod.Get.Method)
-            await RequestGetAllProducts(context);
-
-        else if (context.Request.HttpMethod == HttpMethod.Post.Method)
-            await RequestPostProduct(context);
-
         else
         {
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 404;
-            await writer.WriteLineAsync("Wrong endpoint");
-
+            await writer.WriteLineAsync($"endpoint doesn't Product or User");
             return;
         }
 
     }
 
-    private async Task RequestPostProduct(HttpListenerContext context)
-    {
-        try
-        {
-            context.Response.ContentType = "application/json";
-            using var bodyStream = new StreamReader(context.Request.InputStream);
-            string body = bodyStream.ReadToEnd();
+    //#region Request handlers for products
+    ////private async Task RequestHandleProduct(HttpListenerContext context, string[] urlItems)// POST, GET, PUT, DELETE
+    ////{
+    ////    int id = -1;
+    ////    bool HasId = false;
 
-            Product product = JsonSerializer.Deserialize<Product>(body)
-                ?? throw new ArgumentNullException("body of product request is corrupted");
 
-            productRepository.Post(product);
+    ////    string? item = urlItems.LastOrDefault();
 
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 201;
-            await writer.WriteLineAsync("product posted succesfully");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
+    ////    if (item is null || int.TryParse(item, out id))
+    ////    {
+    ////        HasId = true;
+    ////    }
+        
 
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 400;
-            await writer.WriteLineAsync($"Bad Request (couldn't post product) {ex.Message}");
-        }
-    }
+    ////    if (HasId && context.Request.HttpMethod == HttpMethod.Get.Method)
+    ////        await RequestGetProduct(context, id);
 
-    private async Task RequestGetAllProducts(HttpListenerContext context)
-    {
-        try
-        {
-            context.Response.ContentType = "application/json";
+    ////    else if (HasId && context.Request.HttpMethod == HttpMethod.Delete.Method)
+    ////        await RequestDeleteProduct(context, id);
 
-            IEnumerable<Product> products = productRepository.GetAll();
+    ////    else if (HasId && context.Request.HttpMethod == HttpMethod.Put.Method)
+    ////        await RequestPutProduct(context, id);
 
-            string prods = JsonSerializer.Serialize(products);
+    ////    else if (context.Request.HttpMethod == HttpMethod.Get.Method)
+    ////        await RequestGetAllProducts(context);
 
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 200;
-            await writer.WriteLineAsync(prods);
+    ////    else if (context.Request.HttpMethod == HttpMethod.Post.Method)
+    ////        await RequestPostProduct(context);
 
-        }
-        //catch (Jso)
-        //{
-        //    string prods = "[]";
+    ////    else
+    ////    {
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 404;
+    ////        await writer.WriteLineAsync("Wrong endpoint");
 
-        //    using var writer = new StreamWriter(context.Response.OutputStream);
-        //    context.Response.StatusCode = 200;
-        //    await writer.WriteLineAsync(prods);
-        //}
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
+    ////        return;
+    ////    }
 
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 404;
-            await writer.WriteLineAsync($"error in getting all products{ex.Message}");
-        }
-    }
-    private async Task RequestPutProduct(HttpListenerContext context, int id)
-    {
-        try
-        {
-            context.Response.ContentType = "application/json";
+    ////}
 
-            using var bodyStream = new StreamReader(context.Request.InputStream);
-            string body = bodyStream.ReadToEnd();
+    ////private async Task RequestPostProduct(HttpListenerContext context)
+    ////{
+    ////    try
+    ////    {
+    ////        context.Response.ContentType = "application/json";
+    ////        using var bodyStream = new StreamReader(context.Request.InputStream);
+    ////        string body = bodyStream.ReadToEnd();
 
-            Product product = JsonSerializer.Deserialize<Product>(body) 
-                ?? throw new ArgumentNullException("body of product request is corrupted");
+    ////        Product product = JsonSerializer.Deserialize<Product>(body)
+    ////            ?? throw new ArgumentNullException("body of product request is corrupted");
 
-            productRepository.Update(id, product);
+    ////        productRepository.Post(product);
 
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 200;
-            await writer.WriteLineAsync("product updated succesfully");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 201;
+    ////        await writer.WriteLineAsync("product posted succesfully");
+    ////    }
+    ////    catch (Exception ex)
+    ////    {
+    ////        Console.WriteLine(ex.Message);
 
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 400;
-            await writer.WriteLineAsync($"Bad Request (couldn't change product) {ex.Message}");
-        }
-    }
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 400;
+    ////        await writer.WriteLineAsync($"Bad Request (couldn't post product) {ex.Message}");
+    ////    }
+    ////}
 
-    private async Task RequestGetProduct(HttpListenerContext context, int id)
-    {
-        try
-        {
-            context.Response.ContentType = "application/json";
+    ////private async Task RequestGetAllProducts(HttpListenerContext context)
+    ////{
+    ////    try
+    ////    {
+    ////        context.Response.ContentType = "application/json";
 
-            Product product = productRepository.GetById(id);
-            string prod = JsonSerializer.Serialize(product);
+    ////        IEnumerable<Product> products = productRepository.GetAll();
 
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 200;
-            await writer.WriteLineAsync(prod);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
+    ////        string prods = JsonSerializer.Serialize(products);
 
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 400;
-            await writer.WriteLineAsync($"Bad Request (couldn't find product) {ex.Message}");
-        }    
-    }
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 200;
+    ////        await writer.WriteLineAsync(prods);
 
-    private async Task RequestDeleteProduct(HttpListenerContext context, int id)
-    {
-        try
-        {
-            context.Response.ContentType = "application/json";
+    ////    }
+    ////    catch (Exception ex)
+    ////    {
+    ////        Console.WriteLine(ex.Message);
 
-            productRepository.Delete(id);
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 404;
+    ////        await writer.WriteLineAsync($"error in getting all products{ex.Message}");
+    ////    }
+    ////}
+    ////private async Task RequestPutProduct(HttpListenerContext context, int id)
+    ////{
+    ////    try
+    ////    {
+    ////        context.Response.ContentType = "application/json";
 
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 200;
-            await writer.WriteLineAsync("product deleted succesfully");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
+    ////        using var bodyStream = new StreamReader(context.Request.InputStream);
+    ////        string body = bodyStream.ReadToEnd();
 
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 400;
-            await writer.WriteLineAsync($"Bad Request (couldn't delete product) {ex.Message}");
-        }
-    }
-    #endregion
+    ////        Product product = JsonSerializer.Deserialize<Product>(body) 
+    ////            ?? throw new ArgumentNullException("body of product request is corrupted");
 
-    #region Request handlers for users
+    ////        productRepository.Update(id, product);
 
-    private async Task RequestHandleUser(HttpListenerContext context, string[] urlItems)
-    {
-        if (context.Request.HttpMethod == HttpMethod.Post.Method)
-            await RequestPostUser(context);
-        else if(context.Request.HttpMethod == HttpMethod.Get.Method)
-            await RequestGetUser(context);
-        else
-        {
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 404;
-            await writer.WriteLineAsync("Wrong endpoint");
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 200;
+    ////        await writer.WriteLineAsync("product updated succesfully");
+    ////    }
+    ////    catch (Exception ex)
+    ////    {
+    ////        Console.WriteLine(ex.Message);
 
-            return;
-        }
-    }
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 400;
+    ////        await writer.WriteLineAsync($"Bad Request (couldn't change product) {ex.Message}");
+    ////    }
+    ////}
 
-    private async Task RequestPostUser(HttpListenerContext context)
-    {
-        try
-        {
-            context.Response.ContentType= "application/json";
+    ////private async Task RequestGetProduct(HttpListenerContext context, int id)
+    ////{
+    ////    try
+    ////    {
+    ////        context.Response.ContentType = "application/json";
 
-            using var bodyStream = new StreamReader(context.Request.InputStream);
-            string body = bodyStream.ReadToEnd();
+    ////        Product product = productRepository.GetById(id);
+    ////        string prod = JsonSerializer.Serialize(product);
 
-            User user = JsonSerializer.Deserialize<User>(body)
-                ?? throw new ArgumentNullException("body of user request is corrupted");
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 200;
+    ////        await writer.WriteLineAsync(prod);
+    ////    }
+    ////    catch (Exception ex)
+    ////    {
+    ////        Console.WriteLine(ex.Message);
 
-            userRepository.Post(user);
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 400;
+    ////        await writer.WriteLineAsync($"Bad Request (couldn't find product) {ex.Message}");
+    ////    }    
+    ////}
 
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 201;
-            await writer.WriteLineAsync("user posted succesfully");
+    ////private async Task RequestDeleteProduct(HttpListenerContext context, int id)
+    ////{
+    ////    try
+    ////    {
+    ////        context.Response.ContentType = "application/json";
 
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
+    ////        productRepository.Delete(id);
 
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 400;
-            await writer.WriteLineAsync($"Bad Request (couldn't post user) {ex.Message}");
-        }
-    }
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 200;
+    ////        await writer.WriteLineAsync("product deleted succesfully");
+    ////    }
+    ////    catch (Exception ex)
+    ////    {
+    ////        Console.WriteLine(ex.Message);
 
-    private async Task RequestGetUser(HttpListenerContext context)
-    {
-        try
-        {
-            context.Response.ContentType = "application/json";
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 400;
+    ////        await writer.WriteLineAsync($"Bad Request (couldn't delete product) {ex.Message}");
+    ////    }
+    ////}
+    //#endregion
 
-            using var bodyStream = new StreamReader(context.Request.InputStream);
-            string body = bodyStream.ReadToEnd();
+    //#region Request handlers for users
 
-            User user = JsonSerializer.Deserialize<User>(body)
-                ?? throw new ArgumentNullException("body of user request is corrupted");
+    ////private async Task RequestHandleUser(HttpListenerContext context, string[] urlItems)
+    ////{
+    ////    if (context.Request.HttpMethod == HttpMethod.Post.Method)
+    ////        await RequestPostUser(context);
+    ////    else if(context.Request.HttpMethod == HttpMethod.Get.Method)
+    ////        await RequestGetUser(context);
+    ////    else
+    ////    {
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 404;
+    ////        await writer.WriteLineAsync("Wrong endpoint");
 
-            bool isRegistered = userRepository.IsRegistered(user);
-            string isregistered = JsonSerializer.Serialize(isRegistered);
+    ////        return;
+    ////    }
+    ////}
 
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 200;
-            await writer.WriteLineAsync(isregistered);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
+    ////private async Task RequestPostUser(HttpListenerContext context)
+    ////{
+    ////    try
+    ////    {
+    ////        context.Response.ContentType= "application/json";
 
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 400;
-            await writer.WriteLineAsync($"Bad Request (couldn't find user) {ex.Message}");
-        }
-    }
+    ////        using var bodyStream = new StreamReader(context.Request.InputStream);
+    ////        string body = bodyStream.ReadToEnd();
 
-    #endregion
+    ////        User user = JsonSerializer.Deserialize<User>(body)
+    ////            ?? throw new ArgumentNullException("body of user request is corrupted");
+
+    ////        userRepository.Post(user);
+
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 201;
+    ////        await writer.WriteLineAsync("user posted succesfully");
+
+    ////    }
+    ////    catch (Exception ex)
+    ////    {
+    ////        Console.WriteLine(ex.Message);
+
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 400;
+    ////        await writer.WriteLineAsync($"Bad Request (couldn't post user) {ex.Message}");
+    ////    }
+    ////}
+
+    ////private async Task RequestGetUser(HttpListenerContext context)
+    ////{
+    ////    try
+    ////    {
+    ////        context.Response.ContentType = "application/json";
+
+    ////        using var bodyStream = new StreamReader(context.Request.InputStream);
+    ////        string body = bodyStream.ReadToEnd();
+
+    ////        User user = JsonSerializer.Deserialize<User>(body)
+    ////            ?? throw new ArgumentNullException("body of user request is corrupted");
+
+    ////        bool isRegistered = userRepository.IsRegistered(user);
+    ////        string isregistered = JsonSerializer.Serialize(isRegistered);
+
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 200;
+    ////        await writer.WriteLineAsync(isregistered);
+    ////    }
+    ////    catch (Exception ex)
+    ////    {
+    ////        Console.WriteLine(ex.Message);
+
+    ////        using var writer = new StreamWriter(context.Response.OutputStream);
+    ////        context.Response.StatusCode = 400;
+    ////        await writer.WriteLineAsync($"Bad Request (couldn't find user) {ex.Message}");
+    ////    }
+    ////}
+
+    //#endregion
 }
