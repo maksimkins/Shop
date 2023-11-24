@@ -10,9 +10,10 @@ using SharedProj.Models;
 
 public interface IProductRepository
 {
-    public IEnumerable<Product> GetAll();
+    public IQueryable<Product> GetAll();
     public Product GetById(int id);
     public void Post(Product product);
     public void Update(int id, Product product);
     public void Delete(int id);
+    public IQueryable<Product> GetAllByUserId(int id);
 }
