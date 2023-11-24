@@ -8,6 +8,10 @@
     <ProjectReference Include="..\SharedProj\SharedProj.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Styles\Containers\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
