@@ -11,4 +11,6 @@ public interface IUserRepository
 {
     public bool IsRegistered(User user);
     public void Post(User user);
+
+    public void Update(User user);
 }
