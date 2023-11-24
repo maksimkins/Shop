@@ -23,6 +23,7 @@ public class UserLogic
     }
     public void Post(User user)
     {
+        user.CreationalDate = DateTime.Now;
         userRepository.Post(user);
     }
 

@@ -8,8 +8,8 @@ namespace SharedProj.Models;
 
 public class ProductDTO
 {
-    string? Title { get; set; }
-    string? Text { get; set; }
-    double? PriceFrom { get; set; }
-    double? PriceTo { get; set; }
+    public string? Title { get; set; }
+    public string? Text { get; set; }
+    public double? PriceFrom { get; set; }
+    public double? PriceTo { get; set; }
 }
