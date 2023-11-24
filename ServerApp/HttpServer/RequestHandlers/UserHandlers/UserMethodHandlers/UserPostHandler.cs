@@ -1,5 +1,6 @@
 ﻿using ServerApp.HttpServer.RequestHandlers.Base;
 using ServerApp.Repositories.EF_Core;
+using ServerApp.Repositories.Logic_Classes;
 using SharedProj.Models;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,10 @@ namespace ServerApp.HttpServer.RequestHandlers.UserHandlers.UserMethodHandlers;
 
 public class UserPostHandler : IRequestHandler
 {
-    private readonly UserEFCoreRepository userRepository;
+    private readonly UserLogic userLogic;
     public UserPostHandler()
     {
-        userRepository = new UserEFCoreRepository();
+        userLogic = new UserLogic(new UserEFCoreRepository());
     }
 
     public async void RequestHandle(HttpListenerContext context)
@@ -59,7 +60,7 @@ public class UserPostHandler : IRequestHandler
             User user = JsonSerializer.Deserialize<User>(body)
                 ?? throw new ArgumentNullException("body of user request is corrupted");
 
-            userRepository.Post(user);
+            userLogic.Post(user);
 
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 201;
