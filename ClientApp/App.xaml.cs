@@ -14,6 +14,8 @@ using ClientApp.Utilities.MyHttpClient;
 using ClientApp.ViewModels.Authentication;
 using SharedProj.Models;
 using ClientApp.Views.Authentication;
+using ClientApp.Utilities.Mediator.Interfaces;
+using ClientApp.Utilities.Mediator;
 
 namespace ClientApp
 {
@@ -48,6 +50,8 @@ namespace ClientApp
         private static void RegisterContainer()
         {
             Container.RegisterSingleton<MyHttpClient>();
+
+            Container.RegisterSingleton<IMessenger, Messenger>();
 
             Container.RegisterSingleton<User>();
             Container.RegisterSingleton<SignInViewModel>();

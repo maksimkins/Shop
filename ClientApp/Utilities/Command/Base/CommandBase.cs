@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace ClientApp.Utilities.Command.Base;
 
-public class CommandBase
+public class CommandBase : ICommand
 {
     private readonly Action execute;
     private readonly Func<bool> canExecute;

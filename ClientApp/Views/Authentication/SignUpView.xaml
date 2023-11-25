@@ -33,7 +33,7 @@
 
                 <StackPanel>
                     <Label FontSize="13" Content="Username"/>
-                    <TextBox Style="{StaticResource tbox}" Margin="0 0 0 5" Text="{Binding UsernameInput}"/>
+                    <TextBox Style="{StaticResource tbox}" Margin="0 0 0 5" Text="{Binding LoginInput}"/>
                     <Label FontSize="13" Content="Password"/>
                     <TextBox Style="{StaticResource tbox}" Margin="0 0 0 5" Text="{Binding PasswordInput}"/>
 

@@ -33,15 +33,6 @@ public class HomeViewModel : ViewModelBase
         _httpClient = App.Container.GetInstance<MyHttpClient>();
         this.Products = new ObservableCollection<Product>();
 
-
-        var product = new Product()
-        {
-            Title = "tasetasdgds",
-            Text = "test",
-            Price = 500,
-            UserId = 7,
-        };
-
         GetProducts();
     }
     #endregion

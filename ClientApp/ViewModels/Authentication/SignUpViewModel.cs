@@ -1,8 +1,11 @@
 ﻿using ClientApp.Utilities.Command.Base;
+using ClientApp.Utilities.MyHttpClient;
 using ClientApp.Utilities.Validation;
 using ClientApp.ViewModels.Base;
+using SharedProj.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,11 +16,13 @@ public class SignUpViewModel : ViewModelBase
 {
     #region Fields
 
-    private string? userInput;
-    public string? UsernameInput
+    private readonly MyHttpClient _httpClient;
+
+    private string? loginInput;
+    public string? LoginInput
     {
-        get => userInput;
-        set => base.PropertyChangeMethod(out userInput, value);
+        get => loginInput;
+        set => base.PropertyChangeMethod(out loginInput, value);
     }
 
     private string? passwordInput;
@@ -37,35 +42,53 @@ public class SignUpViewModel : ViewModelBase
 
 
     #region Constructor
-
+    public SignUpViewModel()
+    {
+        _httpClient = App.Container.GetInstance<MyHttpClient>();
+    }
 
 
     #endregion
 
 
     #region Commands
+
     private CommandBase? signUpCommand;
     public CommandBase SignUpCommand => this.signUpCommand ??= new CommandBase(
-            execute: () =>
+            execute: async () =>
             {
                 this.ErrorMessage = string.Empty;
 
-                if (Validator.ValidateCredentials(UsernameInput, PasswordInput) == false)
+                if (Validator.ValidateCredentials(LoginInput, PasswordInput) == false)
                 {
                     this.ErrorMessage = "Invalid credentials!";
                     return;
                 }
 
+                //var userToCreate = new User()
+                //{
+                //    Login = LoginInput,
+                //    Password = PasswordInput,
+                //};
+
+                //var response = await _httpClient.PostAsync<User>("http://localhost:8080/User/", userToCreate);
+
+                //if (response.StatusCode != System.Net.HttpStatusCode.Created)
+                //    return;
+
                 
+
+                //Console.WriteLine(await response.Content.ReadAsStringAsync());
             },
             canExecute: () => true);
+
     #endregion
 
 
     #region Methods
     public override void RefreshViewModel()
     {
-        this.UsernameInput = string.Empty;
+        this.LoginInput = string.Empty;
         this.PasswordInput = string.Empty;
         this.ErrorMessage = string.Empty;
     }
