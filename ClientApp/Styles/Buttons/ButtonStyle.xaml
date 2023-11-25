@@ -2,8 +2,32 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style x:Key ="nav_btn" TargetType="Button">
         <Style.Setters>
-            <Setter Property="Width" Value="50"/>
+
             <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style.Setters>
+
+        <Style.Resources>
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="10" />
+            </Style>
+        </Style.Resources>
+
+        <Style.Triggers>
+            <Trigger Property = "IsMouseOver" Value = "True">
+                <Setter Property = "Background" Value = "#202020" />
+            </Trigger>
+        </Style.Triggers>
+
     </Style>
 </ResourceDictionary>

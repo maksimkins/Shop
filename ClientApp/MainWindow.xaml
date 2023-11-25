@@ -5,10 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="800">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/Buttons/ButtonStyle.xaml"/>
+                <ResourceDictionary Source="Styles/Images/ImagesStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    
     <Grid>
-        
-        <ContentControl Content="{Binding ActiveViewModel}" />
+        <DockPanel>
+            <Grid DockPanel.Dock="Bottom" Height="80" Background="#101010">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <UniformGrid Grid.Column="1" Columns="3" Rows="1" Margin="10">
+                    <Button Style="{StaticResource nav_btn}">
+                        <StackPanel>
+                            <Image Source="Images/Icons/home.png"/>
+                            <TextBlock Foreground="#C8C8C8" FontSize="10" TextAlignment="Center" Margin="0 3 0 0">Home</TextBlock>
+                        </StackPanel>
+                    </Button>
+
+                    <Button DockPanel.Dock="Right" Style="{StaticResource nav_btn}">
+                        <StackPanel>
+                            <Image Source="Images/Icons/add.png"/>
+                            <TextBlock Foreground="#C8C8C8" FontSize="10" TextAlignment="Center" Margin="0 3 0 0">Add</TextBlock>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource nav_btn}">
+                        <StackPanel>
+                            <Image Source="Images/Icons/file.png"/>
+                            <TextBlock Foreground="#C8C8C8" FontSize="10" TextAlignment="Center" Margin="0 3 0 0">My products</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </UniformGrid>
+            </Grid>
+            
+            <ContentControl Content="{Binding ActiveViewModel}" />
+        </DockPanel>
         
     </Grid>
 </Window>

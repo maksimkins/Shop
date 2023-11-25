@@ -1,15 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <Compile Remove="Resourses\**" />
+    <Compile Remove="Styles\Containers\**" />
+    <EmbeddedResource Remove="Resourses\**" />
+    <EmbeddedResource Remove="Styles\Containers\**" />
+    <None Remove="Resourses\**" />
+    <None Remove="Styles\Containers\**" />
+    <Page Remove="Resourses\**" />
+    <Page Remove="Styles\Containers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Images\Icons\add.png" />
+    <None Remove="Images\Icons\file.png" />
+    <None Remove="Images\Icons\home.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Images\Icons\add.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Icons\file.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Icons\home.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="SimpleInjector" Version="5.4.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SharedProj\SharedProj.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Styles\Containers\" />
   </ItemGroup>
 
   <PropertyGroup>
