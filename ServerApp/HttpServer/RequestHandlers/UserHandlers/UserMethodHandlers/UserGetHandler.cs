@@ -60,8 +60,8 @@ public class UserGetHandler : IRequestHandler
             User user = JsonSerializer.Deserialize<User>(body)
                 ?? throw new ArgumentNullException("body of user request is corrupted");
 
-            bool isRegistered = userLogic.IsRegistered(user);
-            string isregistered = JsonSerializer.Serialize(isRegistered);
+            User registeredUser = userLogic.IsRegistered(user);
+            string isregistered = JsonSerializer.Serialize(registeredUser);
 
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 200;
