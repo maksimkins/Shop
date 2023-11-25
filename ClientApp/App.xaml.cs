@@ -60,6 +60,7 @@ namespace ClientApp
             Container.RegisterSingleton<MainWindow>();
             Container.RegisterSingleton<MainViewModel>();
             Container.RegisterSingleton<HomeViewModel>();
+            Container.RegisterSingleton<AddProductViewModel>();
 
             Container.Verify();
         }

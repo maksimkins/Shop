@@ -29,7 +29,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key ="auth_main_btn" TargetType="Button" BasedOn="{StaticResource btn_base}">
+    <Style x:Key ="main_btn" TargetType="Button" BasedOn="{StaticResource btn_base}">
         <Style.Setters>
 
             <Setter Property="Foreground" Value="White" />
@@ -49,7 +49,7 @@
         </Style.Setters>
     </Style>
 
-    <Style x:Key ="auth_second_btn" TargetType="Button" BasedOn="{StaticResource btn_base}">
+    <Style x:Key ="second_btn" TargetType="Button" BasedOn="{StaticResource btn_base}">
         <Style.Setters>
             <Setter Property="Background" Value="White" />
             

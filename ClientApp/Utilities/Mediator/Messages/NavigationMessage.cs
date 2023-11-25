@@ -15,6 +15,6 @@ public class NavigationMessage : IMessage
     public NavigationMessage(ViewModelBase destinationViewModel)
     {
         this.DestinationViewModel = destinationViewModel;
-        this.DestinationViewModel.RefreshViewModel();
+        //this.DestinationViewModel.RefreshViewModel();
     }
 }

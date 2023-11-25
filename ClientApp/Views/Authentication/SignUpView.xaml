@@ -27,8 +27,8 @@
             <DockPanel>
                 <Label Style="{StaticResource auth_title}" DockPanel.Dock="Top" Content="Create account" />
                 <StackPanel DockPanel.Dock="Bottom">
-                    <Button Style="{StaticResource auth_main_btn}" Content="Sign Up" Command="{Binding SignUpCommand}"/>
-                    <Button Style="{StaticResource auth_second_btn}" Content="Go back" Margin="0 5 0 0" Command="{Binding GoBackCommand}"/>
+                    <Button Style="{StaticResource main_btn}" Content="Sign Up" Command="{Binding SignUpCommand}"/>
+                    <Button Style="{StaticResource second_btn}" Content="Go back" Margin="0 5 0 0" Command="{Binding GoBackCommand}"/>
                 </StackPanel>
 
                 <StackPanel>

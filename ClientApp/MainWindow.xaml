@@ -73,7 +73,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button DockPanel.Dock="Right" Style="{StaticResource btn_base}">
+                    <Button DockPanel.Dock="Right" Style="{StaticResource btn_base}" Command="{Binding AddProductCommand}">
                         <StackPanel>
                             <Image Style="{StaticResource btm_nav_icon}" Source="Images/Icons/add.png"/>
                             <TextBlock Style="{StaticResource nav_help}">Add</TextBlock>

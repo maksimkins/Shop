@@ -53,6 +53,14 @@ public class MainViewModel : ViewModelBase
             },
             canExecute: () => true);
 
+
+    private CommandBase? addProductCommand;
+    public CommandBase AddProductCommand => this.addProductCommand ??= new CommandBase(
+            execute: () => {
+                _messenger.Send(new NavigationMessage(App.Container.GetInstance<AddProductViewModel>()));
+            },
+            canExecute: () => true);
+
     #endregion
 
 }

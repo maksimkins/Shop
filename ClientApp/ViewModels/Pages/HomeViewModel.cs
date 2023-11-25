@@ -32,8 +32,6 @@ public class HomeViewModel : ViewModelBase
     {
         _httpClient = App.Container.GetInstance<MyHttpClient>();
         this.Products = new ObservableCollection<Product>();
-
-        GetProducts();
     }
     #endregion
 
@@ -60,8 +58,6 @@ public class HomeViewModel : ViewModelBase
 
         if (response.StatusCode != System.Net.HttpStatusCode.Created)
             return;
-
-        RefreshViewModel();
     }
 
     public override void RefreshViewModel()

@@ -8,17 +8,21 @@
              xmlns:v_page="clr-namespace:ClientApp.Views.Pages"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        
-        <DataTemplate DataType="{x:Type vm_page:HomeViewModel}">
-            <v_page:HomeView/>
-        </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type vm_auth:SignInViewModel}">
             <v_auth:SignInView/>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm_auth:SignUpViewModel}">
             <v_auth:SignUpView/>
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm_page:HomeViewModel}">
+            <v_page:HomeView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm_page:AddProductViewModel}">
+            <v_page:AddProductView/>
         </DataTemplate>
 
     </Application.Resources>
