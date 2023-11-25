@@ -33,12 +33,7 @@ public class UserGetHandler : IRequestHandler
             HasId = true;
         }
 
-        if (!HasId)
-        {
-            await RequestGetUser(context);
-        }
-
-        else if (HasId)
+        if (HasId)
         {
             await RequestGetByIdUser(context, id);
         }
@@ -75,32 +70,5 @@ public class UserGetHandler : IRequestHandler
             await writer.WriteLineAsync($"Bad Request (couldn't find user) {ex.Message}");
         }
     }
-    private async Task RequestGetUser(HttpListenerContext context)
-    {
-        try
-        {
-            context.Response.ContentType = "application/json";
-
-            using var bodyStream = new StreamReader(context.Request.InputStream);
-            string body = bodyStream.ReadToEnd();
-
-            User user = JsonSerializer.Deserialize<User>(body)
-                ?? throw new ArgumentNullException("body of user request is corrupted");
-
-            User registeredUser = userLogic.IsRegistered(user);
-            string isregistered = JsonSerializer.Serialize(registeredUser);
-
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 200;
-            await writer.WriteLineAsync(isregistered);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 400;
-            await writer.WriteLineAsync($"Bad Request (couldn't find user) {ex.Message}");
-        }
-    }
+    
 }
