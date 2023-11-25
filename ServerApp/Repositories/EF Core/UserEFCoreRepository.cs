@@ -22,6 +22,12 @@ public class UserEFCoreRepository : IUserRepository
         return dbcontext.Users.First(u => u.Login == user.Login && u.Password == user.Password);
     }
 
+    public User GetById(int id)
+    {
+        return dbcontext.Users.FirstOrDefault(u => u.Id == id)
+            ?? throw new ArgumentNullException("There is no user with such ID");
+    }
+
     public async void Post(User user)
     {
         await dbcontext.Users.AddAsync(user);

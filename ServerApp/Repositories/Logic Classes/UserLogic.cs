@@ -27,6 +27,11 @@ public class UserLogic
         userRepository.Post(user);
     }
 
+    public User GetById(int id)
+    {
+        return userRepository.GetById(id);
+    }
+
     public void Update(User user)
     {
         user.CreationalDate = DateTime.Now;
