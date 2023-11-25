@@ -14,8 +14,12 @@
         </DataTemplate>
         
         <DataTemplate DataType="{x:Type vm_auth:SignInViewModel}">
-            <v_auth:SignInViewModel/>
+            <v_auth:SignInView/>
         </DataTemplate>
-        
+
+        <DataTemplate DataType="{x:Type vm_auth:SignUpViewModel}">
+            <v_auth:SignUpView/>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>

@@ -13,6 +13,7 @@ using System.Net.Http;
 using ClientApp.Utilities.MyHttpClient;
 using ClientApp.ViewModels.Authentication;
 using SharedProj.Models;
+using ClientApp.Views.Authentication;
 
 namespace ClientApp
 {
@@ -28,7 +29,7 @@ namespace ClientApp
         protected override void OnStartup(StartupEventArgs e)
         {
             RegisterContainer();
-            Start<SignInViewModel>();
+            Start<SignUpViewModel>();
 
             base.OnStartup(e);
         }
@@ -50,6 +51,7 @@ namespace ClientApp
 
             Container.RegisterSingleton<User>();
             Container.RegisterSingleton<SignInViewModel>();
+            Container.RegisterSingleton<SignUpViewModel>();
 
             Container.RegisterSingleton<MainWindow>();
             Container.RegisterSingleton<MainViewModel>();

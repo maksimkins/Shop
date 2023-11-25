@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace ClientApp.Views.Authentication
 {
     /// <summary>
-    /// Interaction logic for SignInViewModel.xaml
+    /// Interaction logic for SignUpView.xaml
     /// </summary>
-    public partial class SignInViewModel : UserControl
+    public partial class SignUpView : UserControl
     {
-        public SignInViewModel()
+        public SignUpView()
         {
             InitializeComponent();
         }
