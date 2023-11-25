@@ -22,33 +22,20 @@ public class UserPutHandler : IRequestHandler
 
     public async void RequestHandle(HttpListenerContext context)
     {
-        int id = -1;
-        bool HasId = false;
-        string[]? urlItems = context.Request.RawUrl?.Split('/');
-
-        string? item = urlItems?.LastOrDefault();
-
-        if (item is null || int.TryParse(item, out id))
+        try
         {
-            HasId = true;
+            await RequestPutUser(context);
         }
-
-        if (HasId)
+        catch(Exception ex)
         {
-            await RequestPutUser(context, id);
-        }
 
-        else
-        {
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 404;
-            await writer.WriteLineAsync("Wrong endpoint");
+            await writer.WriteLineAsync($"Wrong endpoint {ex.Message}");
 
-            return;
-        }
-
+        }    
     }
-    private async Task RequestPutUser(HttpListenerContext context, int id)
+    private async Task RequestPutUser(HttpListenerContext context)
     {
         try
         {
