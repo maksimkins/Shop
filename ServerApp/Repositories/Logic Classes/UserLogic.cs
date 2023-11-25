@@ -17,7 +17,7 @@ public class UserLogic
         this.userRepository = userRepository;
     }
 
-    public bool IsRegistered(User user)
+    public User IsRegistered(User user)
     {
         return userRepository.IsRegistered(user);
     }

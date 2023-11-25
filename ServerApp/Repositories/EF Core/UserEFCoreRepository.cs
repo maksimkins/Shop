@@ -17,9 +17,9 @@ public class UserEFCoreRepository : IUserRepository
     {
         dbcontext = new ShopDbContext();
     }
-    public bool IsRegistered(User user)
+    public User IsRegistered(User user)
     {
-        return dbcontext.Users.Any(u => u.Login == user.Login && u.Password == user.Password);
+        return dbcontext.Users.First(u => u.Login == user.Login && u.Password == user.Password);
     }
 
     public async void Post(User user)
