@@ -28,8 +28,10 @@ public class UserPostHandler : IRequestHandler
         {
             await RequestPostGetUser(context);
         }
-
-        await RequestPostUser(context);
+        else
+        {
+            await RequestPostUser(context);
+        }
     }
 
     private async Task RequestPostUser(HttpListenerContext context)
