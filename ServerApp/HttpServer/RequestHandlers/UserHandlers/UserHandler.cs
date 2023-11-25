@@ -14,6 +14,7 @@ public class UserHandler : IRequestHandler
 {
     private IRequestHandler? userGetHandler;
     private IRequestHandler? userPostHandler;
+    private IRequestHandler? userPutHandler;
 
     public async void RequestHandle(HttpListenerContext context)
     {
@@ -26,6 +27,12 @@ public class UserHandler : IRequestHandler
         {
             userGetHandler = new UserGetHandler();
             userGetHandler.RequestHandle(context);
+        }
+
+        else if (context.Request.HttpMethod == HttpMethod.Put.Method)
+        {
+            userPutHandler = new UserPutHandler();
+            userPutHandler.RequestHandle(context);
         }
 
         else if (context.Request.HttpMethod == HttpMethod.Post.Method)
