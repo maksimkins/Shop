@@ -46,14 +46,6 @@ public class HomeViewModel : ViewModelBase
         _httpClient = App.Container.GetInstance<MyHttpClient>();
         _messenger = messenger;
 
-        _messenger.Subscribe<CommandMessage>((message) =>
-        {
-            if (message is CommandMessage commandMessage)
-            {
-                
-            }
-        });
-
 
         this.Products = new ObservableCollection<Product>();
 
@@ -65,9 +57,9 @@ public class HomeViewModel : ViewModelBase
 
     private CommandBase? getProductInfoCommand;
     public CommandBase GetProductInfoCommand => this.getProductInfoCommand ??= new CommandBase(
-            execute: async () => {
-
-                
+            execute: () => {
+                Console.WriteLine(SelectedIndex);
+                //App.Container.GetInstance<ProductInfoViewModel>().ProductId = 
             },
             canExecute: () => true);
 

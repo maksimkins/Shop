@@ -70,20 +70,20 @@ public class SignUpViewModel : ViewModelBase
                     return;
                 }
 
-                //var userToCreate = new User()
-                //{
-                //    Login = LoginInput,
-                //    Password = PasswordInput,
-                //};
+                var userToCreate = new User()
+                {
+                    Login = LoginInput,
+                    Password = PasswordInput,
+                };
 
-                //var response = await _httpClient.PostAsync<User>("http://localhost:8080/User/", userToCreate);
+                var response = await _httpClient.PostAsync<User>("http://localhost:8080/User/", userToCreate);
 
-                //if (response.StatusCode != System.Net.HttpStatusCode.Created)
-                //    return;
+                if (response.StatusCode != System.Net.HttpStatusCode.Created)
+                    return;
 
-                
 
-                //Console.WriteLine(await response.Content.ReadAsStringAsync());
+
+                Console.WriteLine(await response.Content.ReadAsStringAsync());
             },
             canExecute: () => true);
 

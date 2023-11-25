@@ -1,6 +1,7 @@
 ﻿using ClientApp.Utilities.Command.Base;
 using ClientApp.Utilities.Mediator.Interfaces;
 using ClientApp.Utilities.Mediator.Messages;
+using ClientApp.Utilities.MyHttpClient;
 using ClientApp.Utilities.Validation;
 using ClientApp.ViewModels.Base;
 using ClientApp.ViewModels.Pages;
@@ -16,6 +17,8 @@ namespace ClientApp.ViewModels.Authentication;
 public class SignInViewModel : ViewModelBase
 {
     #region Fields
+
+    private readonly MyHttpClient _httpClient;
 
     private readonly IMessenger _messenger;
 
@@ -46,6 +49,7 @@ public class SignInViewModel : ViewModelBase
     #region Constructor
     public SignInViewModel(IMessenger messenger)
     {
+        _httpClient = App.Container.GetInstance<MyHttpClient>();
         _messenger = messenger;
     }
     #endregion
@@ -63,6 +67,8 @@ public class SignInViewModel : ViewModelBase
                     this.ErrorMessage = "Invalid credentials!";
                     return;
                 }
+
+                //var response = await _httpClient.PostAsync<User>("http://localhost:8080/User/", userToCreate)
 
                 //var user = AuthenticateUser();
 

@@ -12,28 +12,32 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Styles/Texts/TextsStyle.xaml" />
                 <ResourceDictionary Source="../../Styles/Containers/ContainersStyle.xaml" />
+                <ResourceDictionary Source="../../Styles/Buttons/ButtonStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid Background="White">
-        <ListView ItemsSource="{Binding Products}" SelectedIndex ="{Binding SelectedIndex}">
-            <ListView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="3" />
-                </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
+        <DockPanel>
+            <Button DockPanel.Dock="Left" Style="{StaticResource second_btn}" Margin="5 15" Command="{Binding GetProductInfoCommand}">Read more</Button>
+        
+            <ListView ItemsSource="{Binding Products}" SelectedIndex ="{Binding SelectedIndex}">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
 
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel TextBlock.FontSize="13px" Margin="5px">
-                        <TextBlock Style="{StaticResource preview_title}" Text="{Binding Title}"/>
-                        <TextBlock Style="{StaticResource preview_price}" Text="{Binding Price, StringFormat={}{0} AZN}"/>
-                        <TextBlock Text="{Binding CreationalDate}"/>
-                        <Button>Read more</Button>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel TextBlock.FontSize="13px" Margin="5px">
+                            <TextBlock Style="{StaticResource preview_title}" Text="{Binding Title}"/>
+                            <TextBlock Style="{StaticResource preview_price}" Text="{Binding Price, StringFormat={}{0} AZN}"/>
+                            <TextBlock Text="{Binding CreationalDate}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </DockPanel>
     </Grid>
 </UserControl>
