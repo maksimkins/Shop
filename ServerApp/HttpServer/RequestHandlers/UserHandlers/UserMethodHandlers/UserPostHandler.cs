@@ -22,30 +22,10 @@ public class UserPostHandler : IRequestHandler
 
     public async void RequestHandle(HttpListenerContext context)
     {
-        int id = -1;
-        bool HasId = false;
-        string[]? urlItems = context.Request.RawUrl?.Split('/');
+        
+        await RequestPostUser(context);
+        
 
-        string? item = urlItems?.LastOrDefault();
-
-        if (item is null || int.TryParse(item, out id))
-        {
-            HasId = true;
-        }
-
-        if (HasId)
-        {
-            await RequestPostUser(context);
-        }
-
-        else
-        {
-            using var writer = new StreamWriter(context.Response.OutputStream);
-            context.Response.StatusCode = 404;
-            await writer.WriteLineAsync("Wrong endpoint");
-
-            return;
-        }
     }
 
     private async Task RequestPostUser(HttpListenerContext context)
