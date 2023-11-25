@@ -12,6 +12,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/Buttons/ButtonStyle.xaml"/>
                 <ResourceDictionary Source="Styles/Images/ImagesStyle.xaml"/>
+                <ResourceDictionary Source="Styles/Containers/ContainersStyle.xaml"/>
+                <ResourceDictionary Source="Styles/Texts/TextsStyle.xaml" />
+                <ResourceDictionary Source="Styles/TextBoxes/TextBoxesStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -19,7 +22,37 @@
     
     <Grid>
         <DockPanel>
-            <Grid DockPanel.Dock="Bottom" Height="80" Background="#101010">
+
+            <Grid Style="{StaticResource grid_dark}" DockPanel.Dock="Top" Height="70">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="0.3*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="1" Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Margin="0 0 5 0" Style="{StaticResource nav_tbox}" Grid.Column="0"/>
+                    <Button Style="{StaticResource nav_btn}" Grid.Column="1">
+                        <Image Style="{StaticResource top_nav_icon}" Grid.Column="1" Source="Images/Icons/search.png"/>
+                    </Button>
+                </Grid>
+
+                <Button Style="{StaticResource nav_btn}" Grid.Column="3" Margin="10">
+                    <StackPanel>
+                        <Image Style="{StaticResource top_nav_icon}" Source="Images/Icons/user.png"/>
+                        <TextBlock Style="{StaticResource nav_tblock}">User Info</TextBlock>
+                    </StackPanel>
+                </Button>
+            </Grid>
+            
+            
+            <Grid Style="{StaticResource grid_dark}" DockPanel.Dock="Bottom" Height="80">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="1.5*"/>
@@ -29,22 +62,22 @@
                 <UniformGrid Grid.Column="1" Columns="3" Rows="1" Margin="10">
                     <Button Style="{StaticResource nav_btn}">
                         <StackPanel>
-                            <Image Source="Images/Icons/home.png"/>
-                            <TextBlock Foreground="#C8C8C8" FontSize="10" TextAlignment="Center" Margin="0 3 0 0">Home</TextBlock>
+                            <Image Style="{StaticResource btm_nav_icon}" Source="Images/Icons/home.png"/>
+                            <TextBlock Style="{StaticResource nav_tblock}">Home</TextBlock>
                         </StackPanel>
                     </Button>
 
                     <Button DockPanel.Dock="Right" Style="{StaticResource nav_btn}">
                         <StackPanel>
-                            <Image Source="Images/Icons/add.png"/>
-                            <TextBlock Foreground="#C8C8C8" FontSize="10" TextAlignment="Center" Margin="0 3 0 0">Add</TextBlock>
+                            <Image Style="{StaticResource btm_nav_icon}" Source="Images/Icons/add.png"/>
+                            <TextBlock Style="{StaticResource nav_tblock}">Add</TextBlock>
                         </StackPanel>
                     </Button>
 
                     <Button Style="{StaticResource nav_btn}">
                         <StackPanel>
-                            <Image Source="Images/Icons/file.png"/>
-                            <TextBlock Foreground="#C8C8C8" FontSize="10" TextAlignment="Center" Margin="0 3 0 0">My products</TextBlock>
+                            <Image Style="{StaticResource btm_nav_icon}" Source="Images/Icons/file.png"/>
+                            <TextBlock Style="{StaticResource nav_tblock}">My products</TextBlock>
                         </StackPanel>
                     </Button>
                 </UniformGrid>

@@ -2,19 +2,17 @@
 
   <ItemGroup>
     <Compile Remove="Resourses\**" />
-    <Compile Remove="Styles\Containers\**" />
     <EmbeddedResource Remove="Resourses\**" />
-    <EmbeddedResource Remove="Styles\Containers\**" />
     <None Remove="Resourses\**" />
-    <None Remove="Styles\Containers\**" />
     <Page Remove="Resourses\**" />
-    <Page Remove="Styles\Containers\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Images\Icons\add.png" />
     <None Remove="Images\Icons\file.png" />
     <None Remove="Images\Icons\home.png" />
+    <None Remove="Images\Icons\search.png" />
+    <None Remove="Images\Icons\user.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +23,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Icons\home.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Icons\search.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Icons\user.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
