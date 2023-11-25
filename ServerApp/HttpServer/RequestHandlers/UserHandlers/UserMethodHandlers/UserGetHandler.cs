@@ -72,7 +72,7 @@ public class UserGetHandler : IRequestHandler
 
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 400;
-            await writer.WriteLineAsync($"Bad Request (couldn't find product) {ex.Message}");
+            await writer.WriteLineAsync($"Bad Request (couldn't find user) {ex.Message}");
         }
     }
     private async Task RequestGetUser(HttpListenerContext context)
