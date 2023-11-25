@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ClientApp.Views.Pages"
+             xmlns:local="clr-namespace:ClientApp.Views.Pages" xmlns:i="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
 
@@ -17,7 +17,7 @@
     </UserControl.Resources>
 
     <Grid Background="White">
-        <ListView ItemsSource="{Binding Products}">
+        <ListView ItemsSource="{Binding Products}" SelectedIndex ="{Binding SelectedIndex}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="3" />
@@ -30,6 +30,7 @@
                         <TextBlock Style="{StaticResource preview_title}" Text="{Binding Title}"/>
                         <TextBlock Style="{StaticResource preview_price}" Text="{Binding Price, StringFormat={}{0} AZN}"/>
                         <TextBlock Text="{Binding CreationalDate}"/>
+                        <Button>Read more</Button>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

@@ -1,4 +1,7 @@
-﻿using ClientApp.Utilities.MyHttpClient;
+﻿using ClientApp.Utilities.Command.Base;
+using ClientApp.Utilities.Mediator.Interfaces;
+using ClientApp.Utilities.Mediator.Messages;
+using ClientApp.Utilities.MyHttpClient;
 using ClientApp.ViewModels.Base;
 using ClientApp.ViewModels.Main;
 using SharedProj.Models;
@@ -22,19 +25,53 @@ public class HomeViewModel : ViewModelBase
 
     private readonly MyHttpClient _httpClient;
 
+    private readonly IMessenger _messenger;
+
     public ObservableCollection<Product> Products { get; set; }
+
+
+    private int selectedIndex;
+    public int SelectedIndex
+    {
+        get => selectedIndex;
+        set => base.PropertyChangeMethod(out selectedIndex, value);
+    }
 
     #endregion
 
 
     #region Constructor
-    public HomeViewModel()
+    public HomeViewModel(IMessenger messenger)
     {
         _httpClient = App.Container.GetInstance<MyHttpClient>();
+        _messenger = messenger;
+
+        _messenger.Subscribe<CommandMessage>((message) =>
+        {
+            if (message is CommandMessage commandMessage)
+            {
+                
+            }
+        });
+
+
         this.Products = new ObservableCollection<Product>();
+
     }
     #endregion
 
+
+    #region Commands
+
+    private CommandBase? getProductInfoCommand;
+    public CommandBase GetProductInfoCommand => this.getProductInfoCommand ??= new CommandBase(
+            execute: async () => {
+
+                
+            },
+            canExecute: () => true);
+
+    #endregion
 
     #region Methods
     public async void GetProducts()
@@ -50,14 +87,6 @@ public class HomeViewModel : ViewModelBase
 
         foreach (var product in products)
             this.Products.Add(product);
-    }
-
-    public async void AddProduct(Product product)
-    {
-        var response = await _httpClient.PostAsync("http://localhost:8080/Product", product);
-
-        if (response.StatusCode != System.Net.HttpStatusCode.Created)
-            return;
     }
 
     public override void RefreshViewModel()

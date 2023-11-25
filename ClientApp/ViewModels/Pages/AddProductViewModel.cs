@@ -19,8 +19,6 @@ public class AddProductViewModel : ViewModelBase
 
     private readonly MyHttpClient _httpClient;
 
-    private readonly IMessenger _messenger;
-
     private string? titleInput;
     public string? TitleInput
     {
@@ -62,7 +60,6 @@ public class AddProductViewModel : ViewModelBase
     public AddProductViewModel(IMessenger messenger)
     {
         _httpClient = App.Container.GetInstance<MyHttpClient>();
-        _messenger = messenger;
         PriceInput = 0;
     }
     #endregion

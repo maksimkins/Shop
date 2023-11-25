@@ -1,7 +1,4 @@
-﻿using ClientApp.Utilities.Mediator.Interfaces;
-using ClientApp.Utilities.Mediator.Messages;
-using ClientApp.ViewModels.Pages;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,15 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ClientApp.Views.Pages;
-
-/// <summary>
-/// Interaction logic for HomeView.xaml
-/// </summary>
-public partial class HomeView : UserControl
+namespace ClientApp.Views.Pages
 {
-    public HomeView()
+    /// <summary>
+    /// Interaction logic for ProductInfoView.xaml
+    /// </summary>
+    public partial class ProductInfoView : UserControl
     {
-        InitializeComponent();
+        public ProductInfoView()
+        {
+            InitializeComponent();
+        }
     }
 }
