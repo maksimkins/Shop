@@ -11,6 +11,8 @@ using System.Windows;
 using SimpleInjector;
 using System.Net.Http;
 using ClientApp.Utilities.MyHttpClient;
+using ClientApp.ViewModels.Authentication;
+using SharedProj.Models;
 
 namespace ClientApp
 {
@@ -26,7 +28,7 @@ namespace ClientApp
         protected override void OnStartup(StartupEventArgs e)
         {
             RegisterContainer();
-            Start<HomeViewModel>();
+            Start<SignInViewModel>();
 
             base.OnStartup(e);
         }
@@ -45,6 +47,9 @@ namespace ClientApp
         private static void RegisterContainer()
         {
             Container.RegisterSingleton<MyHttpClient>();
+
+            Container.RegisterSingleton<User>();
+            Container.RegisterSingleton<SignInViewModel>();
 
             Container.RegisterSingleton<MainWindow>();
             Container.RegisterSingleton<MainViewModel>();

@@ -14,4 +14,6 @@ public class ViewModelBase : INotifyPropertyChanged
         if (this.PropertyChanged != null)
             this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propName));
     }
+
+    public virtual void RefreshViewModel() { }
 }

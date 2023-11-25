@@ -69,6 +69,14 @@ public class HomeViewModel : ViewModelBase
 
         if (response.StatusCode != System.Net.HttpStatusCode.Created)
             return;
+
+        RefreshViewModel();
+    }
+
+    public override void RefreshViewModel()
+    {
+        Products.Clear();
+        GetProducts();
     }
 
     #endregion
