@@ -4,13 +4,16 @@ using ClientApp.Utilities.Mediator.Messages;
 using ClientApp.Utilities.MyHttpClient;
 using ClientApp.Utilities.Validation;
 using ClientApp.ViewModels.Base;
+using ClientApp.ViewModels.Main;
 using ClientApp.ViewModels.Pages;
 using SharedProj.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows.Ink;
 
 namespace ClientApp.ViewModels.Authentication;
 
@@ -59,7 +62,7 @@ public class SignInViewModel : ViewModelBase
 
     private CommandBase? loginCommand;
     public CommandBase LoginCommand => this.loginCommand ??= new CommandBase(
-            execute: () => {
+            execute: async () => {
                 this.ErrorMessage = string.Empty;
 
                 if (Validator.ValidateCredentials(UsernameInput, PasswordInput) == false)
@@ -68,20 +71,32 @@ public class SignInViewModel : ViewModelBase
                     return;
                 }
 
-                //var response = await _httpClient.PostAsync<User>("http://localhost:8080/User/", userToCreate)
+                var userToLogin = new User()
+                {
+                    Login = UsernameInput,
+                    Password = PasswordInput,
+                };
 
-                //var user = AuthenticateUser();
+                var response = await _httpClient.PostAsync("http://localhost:8080/User/Authentication", userToLogin);
 
-                //if (user == null)
-                //{
-                //    this.ErrorMessage = "Couldn't login in the system!";
-                //    return;
-                //}
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    this.ErrorMessage = "Couldn't login in the system!";
+                    return;
+                }
 
-                //App.Container.GetInstance<User>().Id = user.Id;
-                //App.Container.GetInstance<User>().Login = user.Username;
-                //App.Container.GetInstance<User>().Password = user.Password;
+                var json = await response.Content.ReadAsStringAsync();
+                var user = JsonSerializer.Deserialize<User>(json) ??
+                    throw new Exception();
 
+                App.Container.GetInstance<User>().Id = user.Id;
+                App.Container.GetInstance<User>().Login = user.Login;
+                App.Container.GetInstance<User>().Password = user.Password;
+                App.Container.GetInstance<User>().CreationalDate = user.CreationalDate;
+
+                App.Container.GetInstance<MainViewModel>().IsAuthenticated = true;
+
+                _messenger.Send(new NavigationMessage(App.Container.GetInstance<HomeViewModel>()));
             },
             canExecute: () => true);
 
@@ -91,5 +106,14 @@ public class SignInViewModel : ViewModelBase
                 _messenger.Send(new NavigationMessage(App.Container.GetInstance<SignUpViewModel>()));
             },
             canExecute: () => true);
+    #endregion
+
+    #region Methods
+    public override void RefreshViewModel()
+    {
+        this.UsernameInput = string.Empty;
+        this.PasswordInput = string.Empty;
+        this.ErrorMessage = string.Empty;
+    }
     #endregion
 }

@@ -18,6 +18,15 @@ public class MainViewModel : ViewModelBase
     private readonly IMessenger _messenger;
 
 
+    private bool isAuthenticated;
+
+    public bool IsAuthenticated
+    {
+        get => isAuthenticated;
+        set => base.PropertyChangeMethod(out isAuthenticated, value);
+    }
+
+
     private ViewModelBase? activeViewModel;
     public ViewModelBase? ActiveViewModel
     {

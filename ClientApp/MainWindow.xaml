@@ -18,11 +18,10 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    
-    
+
     <Grid>
         <DockPanel>
-            <Grid DockPanel.Dock="Top" Style="{StaticResource grid_dark}" Height="70">
+            <Grid DockPanel.Dock="Top" Style="{StaticResource grid_dark}" Height="70" Visibility="{Binding IsAuthenticated, Converter={StaticResource BoolToVis}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="750"/>
@@ -56,9 +55,9 @@
                     </Button>
                 </Grid>
             </Grid>
-            
-            
-            <Grid Style="{StaticResource grid_dark}" DockPanel.Dock="Bottom" Height="80">
+
+
+            <Grid Style="{StaticResource grid_dark}" DockPanel.Dock="Bottom" Height="80" Visibility="{Binding IsAuthenticated, Converter={StaticResource BoolToVis}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="1.5*"/>

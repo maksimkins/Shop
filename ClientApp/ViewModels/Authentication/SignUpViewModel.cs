@@ -76,14 +76,12 @@ public class SignUpViewModel : ViewModelBase
                     Password = PasswordInput,
                 };
 
-                var response = await _httpClient.PostAsync<User>("http://localhost:8080/User/", userToCreate);
+                var response = await _httpClient.PostAsync("http://localhost:8080/User/", userToCreate);
 
                 if (response.StatusCode != System.Net.HttpStatusCode.Created)
                     return;
 
-
-
-                Console.WriteLine(await response.Content.ReadAsStringAsync());
+                _messenger.Send(new NavigationMessage(App.Container.GetInstance<SignInViewModel>()));
             },
             canExecute: () => true);
 

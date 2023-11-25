@@ -81,7 +81,7 @@ public class AddProductViewModel : ViewModelBase
                     Title = TitleInput!,
                     Text = DescriptionInput!,
                     Price = PriceInput,
-                    UserId = 7, /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    UserId = App.Container.GetInstance<User>().Id,
                 };
 
                 var response = await _httpClient.PostAsync("http://localhost:8080/Product", productToAdd);
@@ -91,7 +91,6 @@ public class AddProductViewModel : ViewModelBase
                     ErrorMessage = "Cannot create product!";
                     return;
                 }
-
 
                 RefreshViewModel();
                 SuccessMessage = "Product was successfully created!";
