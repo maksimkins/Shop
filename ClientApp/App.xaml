@@ -25,5 +25,13 @@
             <v_page:AddProductView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm_page:UserInfoViewModel}">
+            <v_page:UserInfoView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm_page:ChangePasswordViewModel}">
+            <v_page:ChangePasswordView/>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>

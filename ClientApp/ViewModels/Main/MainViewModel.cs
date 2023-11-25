@@ -70,6 +70,13 @@ public class MainViewModel : ViewModelBase
             },
             canExecute: () => true);
 
+    private CommandBase? userInfoCommand;
+    public CommandBase UserInfoCommand => this.userInfoCommand ??= new CommandBase(
+            execute: () => {
+                _messenger.Send(new NavigationMessage(App.Container.GetInstance<UserInfoViewModel>()));
+            },
+            canExecute: () => true);
+
     #endregion
 
 }

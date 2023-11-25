@@ -49,6 +49,7 @@ public class SignInViewModel : ViewModelBase
 
     #endregion Fields
 
+
     #region Constructor
     public SignInViewModel(IMessenger messenger)
     {
@@ -107,6 +108,7 @@ public class SignInViewModel : ViewModelBase
             },
             canExecute: () => true);
     #endregion
+
 
     #region Methods
     public override void RefreshViewModel()

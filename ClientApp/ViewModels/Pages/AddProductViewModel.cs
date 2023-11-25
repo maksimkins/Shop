@@ -57,7 +57,7 @@ public class AddProductViewModel : ViewModelBase
     #endregion
 
     #region Constructor
-    public AddProductViewModel(IMessenger messenger)
+    public AddProductViewModel()
     {
         _httpClient = App.Container.GetInstance<MyHttpClient>();
         PriceInput = 0;

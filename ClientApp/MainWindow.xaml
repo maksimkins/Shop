@@ -47,7 +47,7 @@
                         </Button>
                     </Grid>
 
-                    <Button Style="{StaticResource btn_base}" Grid.Column="3" Margin="10">
+                    <Button Style="{StaticResource btn_base}" Grid.Column="3" Margin="10" Command="{Binding UserInfoCommand}">
                         <StackPanel>
                             <Image Style="{StaticResource btm_nav_icon}" Source="Images/Icons/user.png"/>
                             <!--<TextBlock Style="{StaticResource nav_tblock}">User Info</TextBlock>-->
