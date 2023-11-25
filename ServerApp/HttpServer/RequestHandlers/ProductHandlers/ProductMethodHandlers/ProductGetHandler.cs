@@ -54,7 +54,7 @@ public class ProductGetHandler : IRequestHandler
             await RequestGetProduct(context, id);
         }
 
-        else if(HasId && context.Request.QueryString.Count > 0)
+        else if(context.Request.QueryString.Count > 0)
         {
             await RequestGetAllFilteredProducts(context, filter);
         }
