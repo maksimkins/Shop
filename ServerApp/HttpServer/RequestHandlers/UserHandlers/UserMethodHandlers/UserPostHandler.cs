@@ -22,10 +22,14 @@ public class UserPostHandler : IRequestHandler
 
     public async void RequestHandle(HttpListenerContext context)
     {
-        
-        await RequestPostUser(context);
-        
+        string[]? urlItems = context.Request.RawUrl?.Split('/');
 
+        if (urlItems is not null && urlItems.Contains("Authentication"))
+        {
+            await RequestPostGetUser(context);
+        }
+
+        await RequestPostUser(context);
     }
 
     private async Task RequestPostUser(HttpListenerContext context)
@@ -54,6 +58,35 @@ public class UserPostHandler : IRequestHandler
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 400;
             await writer.WriteLineAsync($"Bad Request (couldn't post user) {ex.Message}");
+        }
+    }
+
+    private async Task RequestPostGetUser(HttpListenerContext context)
+    {
+        try
+        {
+            context.Response.ContentType = "application/json";
+
+            using var bodyStream = new StreamReader(context.Request.InputStream);
+            string body = bodyStream.ReadToEnd();
+
+            User user = JsonSerializer.Deserialize<User>(body)
+                ?? throw new ArgumentNullException("body of user request is corrupted");
+
+            User registeredUser = userLogic.IsRegistered(user);
+            string isregistered = JsonSerializer.Serialize(registeredUser);
+
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 200;
+            await writer.WriteLineAsync(isregistered);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 400;
+            await writer.WriteLineAsync($"Bad Request (couldn't find user) {ex.Message}");
         }
     }
 }
