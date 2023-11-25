@@ -1,6 +1,9 @@
 ﻿using ClientApp.Utilities.Command.Base;
+using ClientApp.Utilities.Mediator.Interfaces;
+using ClientApp.Utilities.Mediator.Messages;
 using ClientApp.Utilities.Validation;
 using ClientApp.ViewModels.Base;
+using ClientApp.ViewModels.Pages;
 using SharedProj.Models;
 using System;
 using System.Collections.Generic;
@@ -13,6 +16,9 @@ namespace ClientApp.ViewModels.Authentication;
 public class SignInViewModel : ViewModelBase
 {
     #region Fields
+
+    private readonly IMessenger _messenger;
+
 
     private string? userInput;
     public string? UsernameInput
@@ -36,6 +42,14 @@ public class SignInViewModel : ViewModelBase
     }
 
     #endregion Fields
+
+    #region Constructor
+    public SignInViewModel(IMessenger messenger)
+    {
+        _messenger = messenger;
+    }
+    #endregion
+
 
     #region Commands
 
@@ -62,6 +76,13 @@ public class SignInViewModel : ViewModelBase
                 //App.Container.GetInstance<User>().Login = user.Username;
                 //App.Container.GetInstance<User>().Password = user.Password;
 
+            },
+            canExecute: () => true);
+
+    private CommandBase? signUpCommand;
+    public CommandBase SignUpCommand => this.signUpCommand ??= new CommandBase(
+            execute: () => {
+                _messenger.Send(new NavigationMessage(App.Container.GetInstance<SignUpViewModel>()));
             },
             canExecute: () => true);
     #endregion

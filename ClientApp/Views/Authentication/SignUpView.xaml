@@ -28,14 +28,14 @@
                 <Label Style="{StaticResource auth_title}" DockPanel.Dock="Top" Content="Create account" />
                 <StackPanel DockPanel.Dock="Bottom">
                     <Button Style="{StaticResource auth_main_btn}" Content="Sign Up" Command="{Binding SignUpCommand}"/>
-                    <Button Style="{StaticResource auth_second_btn}" Content="Go back" Margin="0 5 0 0" FontSize="14" BorderThickness="0" Background="White" Foreground="Black" Padding="4" Command="{Binding GoBackCommand}"/>
+                    <Button Style="{StaticResource auth_second_btn}" Content="Go back" Margin="0 5 0 0" Command="{Binding GoBackCommand}"/>
                 </StackPanel>
 
                 <StackPanel>
                     <Label FontSize="13" Content="Username"/>
-                    <TextBox Style="{StaticResource tbox}" Margin="0 0 0 5" Text="{Binding LoginInput}"/>
+                    <TextBox Style="{StaticResource tbox}" Margin="0 0 0 10" Text="{Binding LoginInput}"/>
                     <Label FontSize="13" Content="Password"/>
-                    <TextBox Style="{StaticResource tbox}" Margin="0 0 0 5" Text="{Binding PasswordInput}"/>
+                    <TextBox Style="{StaticResource tbox}" Text="{Binding PasswordInput}"/>
 
                     <Label Style="{StaticResource error_msg}" Margin="0 10 0 0" Content="{Binding ErrorMessage}" />
                 </StackPanel>

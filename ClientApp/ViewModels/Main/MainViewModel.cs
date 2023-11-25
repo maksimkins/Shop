@@ -45,6 +45,7 @@ public class MainViewModel : ViewModelBase
     #endregion
 
     #region Commands
+
     private CommandBase? homeCommand;
     public CommandBase HomeCommand => this.homeCommand ??= new CommandBase(
             execute: () => {

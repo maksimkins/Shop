@@ -31,7 +31,7 @@ namespace ClientApp
         protected override void OnStartup(StartupEventArgs e)
         {
             RegisterContainer();
-            Start<SignUpViewModel>();
+            Start<SignInViewModel>();
 
             base.OnStartup(e);
         }

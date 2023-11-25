@@ -1,4 +1,6 @@
 ﻿using ClientApp.Utilities.Command.Base;
+using ClientApp.Utilities.Mediator.Interfaces;
+using ClientApp.Utilities.Mediator.Messages;
 using ClientApp.Utilities.MyHttpClient;
 using ClientApp.Utilities.Validation;
 using ClientApp.ViewModels.Base;
@@ -15,6 +17,8 @@ namespace ClientApp.ViewModels.Authentication;
 public class SignUpViewModel : ViewModelBase
 {
     #region Fields
+
+    private readonly IMessenger _messenger;
 
     private readonly MyHttpClient _httpClient;
 
@@ -42,8 +46,9 @@ public class SignUpViewModel : ViewModelBase
 
 
     #region Constructor
-    public SignUpViewModel()
+    public SignUpViewModel(IMessenger messenger)
     {
+        _messenger = messenger;
         _httpClient = App.Container.GetInstance<MyHttpClient>();
     }
 
@@ -79,6 +84,14 @@ public class SignUpViewModel : ViewModelBase
                 
 
                 //Console.WriteLine(await response.Content.ReadAsStringAsync());
+            },
+            canExecute: () => true);
+
+    private CommandBase? goBackCommand;
+    public CommandBase GoBackCommand => this.goBackCommand ??= new CommandBase(
+            execute: async () =>
+            {
+                _messenger.Send(new NavigationMessage(App.Container.GetInstance<SignInViewModel>()));
             },
             canExecute: () => true);
 
