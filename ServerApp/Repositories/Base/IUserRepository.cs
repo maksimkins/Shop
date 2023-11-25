@@ -9,8 +9,9 @@ namespace ServerApp.Repositories.Base;
 
 public interface IUserRepository
 {
-    public bool IsRegistered(User user);
+    public User IsRegistered(User user);
     public void Post(User user);
-
     public void Update(User user);
+    public User GetById(int id);
+
 }

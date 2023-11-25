@@ -33,9 +33,14 @@ public class UserGetHandler : IRequestHandler
             HasId = true;
         }
 
-        if (HasId)
+        if (!HasId)
         {
             await RequestGetUser(context);
+        }
+
+        else if (HasId)
+        {
+            await RequestGetByIdUser(context, id);
         }
 
         else
@@ -48,6 +53,28 @@ public class UserGetHandler : IRequestHandler
         }
     }
 
+    private async Task RequestGetByIdUser(HttpListenerContext context, int id)
+    {
+        try
+        {
+            context.Response.ContentType = "application/json";
+
+            User user = userLogic.GetById(id);
+            string userstr = JsonSerializer.Serialize(user);
+
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 200;
+            await writer.WriteLineAsync(userstr);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+
+            using var writer = new StreamWriter(context.Response.OutputStream);
+            context.Response.StatusCode = 400;
+            await writer.WriteLineAsync($"Bad Request (couldn't find user) {ex.Message}");
+        }
+    }
     private async Task RequestGetUser(HttpListenerContext context)
     {
         try
@@ -60,8 +87,8 @@ public class UserGetHandler : IRequestHandler
             User user = JsonSerializer.Deserialize<User>(body)
                 ?? throw new ArgumentNullException("body of user request is corrupted");
 
-            bool isRegistered = userLogic.IsRegistered(user);
-            string isregistered = JsonSerializer.Serialize(isRegistered);
+            User registeredUser = userLogic.IsRegistered(user);
+            string isregistered = JsonSerializer.Serialize(registeredUser);
 
             using var writer = new StreamWriter(context.Response.OutputStream);
             context.Response.StatusCode = 200;

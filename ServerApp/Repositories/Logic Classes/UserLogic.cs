@@ -17,7 +17,7 @@ public class UserLogic
         this.userRepository = userRepository;
     }
 
-    public bool IsRegistered(User user)
+    public User IsRegistered(User user)
     {
         return userRepository.IsRegistered(user);
     }
@@ -25,6 +25,11 @@ public class UserLogic
     {
         user.CreationalDate = DateTime.Now;
         userRepository.Post(user);
+    }
+
+    public User GetById(int id)
+    {
+        return userRepository.GetById(id);
     }
 
     public void Update(User user)

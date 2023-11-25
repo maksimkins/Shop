@@ -17,9 +17,15 @@ public class UserEFCoreRepository : IUserRepository
     {
         dbcontext = new ShopDbContext();
     }
-    public bool IsRegistered(User user)
+    public User IsRegistered(User user)
     {
-        return dbcontext.Users.Any(u => u.Login == user.Login && u.Password == user.Password);
+        return dbcontext.Users.First(u => u.Login == user.Login && u.Password == user.Password);
+    }
+
+    public User GetById(int id)
+    {
+        return dbcontext.Users.FirstOrDefault(u => u.Id == id)
+            ?? throw new ArgumentNullException("There is no user with such ID");
     }
 
     public async void Post(User user)
