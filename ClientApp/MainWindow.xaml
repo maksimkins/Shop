@@ -66,7 +66,7 @@
                 </Grid.ColumnDefinitions>
 
                 <UniformGrid Grid.Column="1" Columns="3" Rows="1" Margin="10">
-                    <Button Style="{StaticResource btn_base}">
+                    <Button Style="{StaticResource btn_base}" Command="{Binding HomeCommand}">
                         <StackPanel>
                             <Image Style="{StaticResource btm_nav_icon}" Source="Images/Icons/home.png"/>
                             <TextBlock Style="{StaticResource nav_help}">Home</TextBlock>
