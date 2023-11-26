@@ -7,11 +7,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="White">
-        <Label Content="{Binding Title}"/>
-        <TextBlock Text="{Binding Description}"/>
-        <Label Content="{Binding Price}"/>
-        <Label Content="{Binding CreationDate}"/>
-        
-        <Label Content="{Binding AuthorLogin}"/>
+        <StackPanel Orientation="Vertical">
+            <Label Content="Title" />
+            <Label Content="{Binding Title}"/>
+            <Label Content="Description" />
+            <TextBlock Text="{Binding Description}"/>
+            <Label Content="Price" />
+            <Label Content="{Binding Price}"/>
+            <Label Content="Created in" />
+            <Label Content="{Binding CreationDate}"/>
+            <Label Content="by"/>
+            <Label Content="{Binding AuthorLogin}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

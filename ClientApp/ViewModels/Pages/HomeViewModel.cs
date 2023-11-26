@@ -55,14 +55,6 @@ public class HomeViewModel : ViewModelBase
 
     #region Commands
 
-    private CommandBase? getProductInfoCommand;
-    public CommandBase GetProductInfoCommand => this.getProductInfoCommand ??= new CommandBase(
-            execute: () => {
-                Console.WriteLine(SelectedIndex);
-                //App.Container.GetInstance<ProductInfoViewModel>().ProductId = 
-            },
-            canExecute: () => true);
-
     #endregion
 
     #region Methods

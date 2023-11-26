@@ -16,6 +16,7 @@ using SharedProj.Models;
 using ClientApp.Views.Authentication;
 using ClientApp.Utilities.Mediator.Interfaces;
 using ClientApp.Utilities.Mediator;
+using ClientApp.Views.Pages;
 
 namespace ClientApp
 {
@@ -60,9 +61,11 @@ namespace ClientApp
             Container.RegisterSingleton<MainWindow>();
             Container.RegisterSingleton<MainViewModel>();
             Container.RegisterSingleton<HomeViewModel>();
+            //Container.RegisterSingleton<HomeView>();
             Container.RegisterSingleton<AddProductViewModel>();
             Container.RegisterSingleton<UserInfoViewModel>();
             Container.RegisterSingleton<ChangePasswordViewModel>();
+            Container.RegisterSingleton<ProductInfoViewModel>();
 
             Container.Verify();
         }

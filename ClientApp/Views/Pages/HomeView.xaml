@@ -19,9 +19,7 @@
 
     <Grid Background="White">
         <DockPanel>
-            <Button DockPanel.Dock="Left" Style="{StaticResource second_btn}" Margin="5 15" Command="{Binding GetProductInfoCommand}">Read more</Button>
-        
-            <ListView ItemsSource="{Binding Products}" SelectedIndex ="{Binding SelectedIndex}">
+            <ListView  x:Name="Products_LV" ItemsSource="{Binding Products}" SelectedIndex ="{Binding SelectedIndex}" MouseDoubleClick="Products_LV_MouseDoubleClick">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Columns="3" />
