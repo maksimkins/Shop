@@ -1,12 +1,16 @@
 ﻿using ClientApp.Utilities.Command.Base;
 using ClientApp.Utilities.Mediator.Interfaces;
 using ClientApp.Utilities.Mediator.Messages;
+using ClientApp.Utilities.MyHttpClient;
 using ClientApp.ViewModels.Base;
 using ClientApp.ViewModels.Pages;
+using SharedProj.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ClientApp.ViewModels.Main;
@@ -14,6 +18,8 @@ namespace ClientApp.ViewModels.Main;
 public class MainViewModel : ViewModelBase
 {
     #region Fields
+
+    private readonly MyHttpClient _httpClient;
 
     private readonly IMessenger _messenger;
 
@@ -34,12 +40,22 @@ public class MainViewModel : ViewModelBase
         set => base.PropertyChangeMethod(out activeViewModel, value);
     }
 
+
+    private string searchInput;
+
+    public string SearchInput
+    {
+        get => searchInput;
+        set => base.PropertyChangeMethod(out searchInput, value);
+    }
+
     #endregion
 
 
     #region Constructor
     public MainViewModel(IMessenger messenger)
     {
+        _httpClient = App.Container.GetInstance<MyHttpClient>();
         _messenger = messenger;
 
         _messenger.Subscribe<NavigationMessage>((message) =>
@@ -74,6 +90,31 @@ public class MainViewModel : ViewModelBase
     public CommandBase UserInfoCommand => this.userInfoCommand ??= new CommandBase(
             execute: () => {
                 _messenger.Send(new NavigationMessage(App.Container.GetInstance<UserInfoViewModel>()));
+            },
+            canExecute: () => true);
+
+
+    private CommandBase? searchCommand;
+    public CommandBase SearchCommand => this.searchCommand ??= new CommandBase(
+            execute: async () => {
+
+                App.Container.GetInstance<HomeViewModel>().TitleToSearch = SearchInput;
+                App.Container.GetInstance<HomeViewModel>().RefreshViewModel();
+
+                //var response = await _httpClient.GetAsync("http://localhost:8080/Product/?title=" + $"{SearchInput}");
+
+                //if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                //    return;
+
+                //var json = await response.Content.ReadAsStringAsync();
+                //var products = JsonSerializer.Deserialize<ObservableCollection<Product>>(json) ??
+                //    throw new Exception();
+
+                //App.Container.GetInstance<ObservableCollection<Product>>().Clear();
+
+                //foreach (var product in products)
+                //    this.App.Container.GetInstance<ObservableCollection<Product>>().Add(product);
+
             },
             canExecute: () => true);
 

@@ -37,6 +37,13 @@ public class HomeViewModel : ViewModelBase
         set => base.PropertyChangeMethod(out selectedIndex, value);
     }
 
+    private string titleToSearch;
+    public string TitleToSearch
+    {
+        get => titleToSearch;
+        set => base.PropertyChangeMethod(out titleToSearch, value);
+    }
+
     #endregion
 
 
@@ -60,7 +67,7 @@ public class HomeViewModel : ViewModelBase
     #region Methods
     public async void GetProducts()
     {
-        var response = await _httpClient.GetAsync("http://localhost:8080/Product");
+        var response = await _httpClient.GetAsync("http://localhost:8080/Product/?title=" + $"{TitleToSearch}");
 
         if (response.StatusCode != System.Net.HttpStatusCode.OK)
             return;

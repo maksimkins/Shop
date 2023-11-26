@@ -18,7 +18,7 @@ public class ProductLogic
 
     public IEnumerable<Product> GetAll()
     {
-        return productRepository.GetAll().AsEnumerable().OrderBy(p => p.CreationalDate);
+        return productRepository.GetAll().AsEnumerable().OrderByDescending(p => p.CreationalDate);
     }
     public Product GetById(int id)
     {

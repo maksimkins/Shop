@@ -17,6 +17,7 @@ using ClientApp.Views.Authentication;
 using ClientApp.Utilities.Mediator.Interfaces;
 using ClientApp.Utilities.Mediator;
 using ClientApp.Views.Pages;
+using System.Collections.ObjectModel;
 
 namespace ClientApp
 {
@@ -59,13 +60,14 @@ namespace ClientApp
             Container.RegisterSingleton<SignUpViewModel>();
 
             Container.RegisterSingleton<MainWindow>();
+
             Container.RegisterSingleton<MainViewModel>();
             Container.RegisterSingleton<HomeViewModel>();
-            //Container.RegisterSingleton<HomeView>();
             Container.RegisterSingleton<AddProductViewModel>();
+            Container.RegisterSingleton<ProductInfoViewModel>();
+
             Container.RegisterSingleton<UserInfoViewModel>();
             Container.RegisterSingleton<ChangePasswordViewModel>();
-            Container.RegisterSingleton<ProductInfoViewModel>();
 
             Container.Verify();
         }
