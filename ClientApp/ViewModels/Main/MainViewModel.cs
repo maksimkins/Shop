@@ -100,21 +100,13 @@ public class MainViewModel : ViewModelBase
 
                 App.Container.GetInstance<HomeViewModel>().TitleToSearch = SearchInput;
                 App.Container.GetInstance<HomeViewModel>().RefreshViewModel();
+            },
+            canExecute: () => true);
 
-                //var response = await _httpClient.GetAsync("http://localhost:8080/Product/?title=" + $"{SearchInput}");
-
-                //if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                //    return;
-
-                //var json = await response.Content.ReadAsStringAsync();
-                //var products = JsonSerializer.Deserialize<ObservableCollection<Product>>(json) ??
-                //    throw new Exception();
-
-                //App.Container.GetInstance<ObservableCollection<Product>>().Clear();
-
-                //foreach (var product in products)
-                //    this.App.Container.GetInstance<ObservableCollection<Product>>().Add(product);
-
+    private CommandBase? myProductsCommand;
+    public CommandBase MyProductsCommand => this.myProductsCommand ??= new CommandBase(
+            execute: () => {
+                _messenger.Send(new NavigationMessage(App.Container.GetInstance<MyProductsViewModel>()));
             },
             canExecute: () => true);
 

@@ -65,6 +65,7 @@ namespace ClientApp
             Container.RegisterSingleton<HomeViewModel>();
             Container.RegisterSingleton<AddProductViewModel>();
             Container.RegisterSingleton<ProductInfoViewModel>();
+            Container.RegisterSingleton<MyProductsViewModel>();
 
             Container.RegisterSingleton<UserInfoViewModel>();
             Container.RegisterSingleton<ChangePasswordViewModel>();

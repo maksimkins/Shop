@@ -40,7 +40,7 @@ public class ProductLogic
     }
     public IEnumerable<Product> GetAllByUserId(int id)
     {
-        return productRepository.GetAllByUserId(id).AsEnumerable();
+        return productRepository.GetAllByUserId(id).AsEnumerable().OrderByDescending(p => p.CreationalDate);
     }
 
     public IEnumerable<Product> Filter(ProductDTO filter)
@@ -56,6 +56,6 @@ public class ProductLogic
             p.Text == (filter.Text ?? p.Text) &&
             p.Price >= (filter.PriceFrom ?? p.Price) &&
             p.Price <= (filter.PriceTo ?? p.Price);
-        });
+        }).OrderByDescending(p => p.CreationalDate);
     }
 }

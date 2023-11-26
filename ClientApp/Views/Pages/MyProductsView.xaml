@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="ClientApp.Views.Pages.MyProductsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ClientApp.Views.Pages"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Styles/Texts/TextsStyle.xaml" />
+                <ResourceDictionary Source="../../Styles/Containers/ContainersStyle.xaml" />
+                <ResourceDictionary Source="../../Styles/Buttons/ButtonStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="White">
+        <DockPanel>
+            <ListView  x:Name="MyProducts_LV" ItemsSource="{Binding MyProducts}" SelectedIndex ="{Binding SelectedIndex}" MouseDoubleClick="MyProducts_LV_MouseDoubleClick">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel TextBlock.FontSize="13px" Margin="5px">
+                            <TextBlock Style="{StaticResource preview_title}" Text="{Binding Title}"/>
+                            <TextBlock Style="{StaticResource preview_price}" Text="{Binding Price, StringFormat={}{0} AZN}"/>
+                            <TextBlock Text="{Binding CreationalDate}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </DockPanel>
+    </Grid>
+</UserControl>

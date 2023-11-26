@@ -54,15 +54,16 @@ public class ProductGetHandler : IRequestHandler
             await RequestGetProduct(context, id);
         }
 
+        else if (int.TryParse(useridstr, out int userid))
+        {
+            await RequestGetAllByUserId(context, userid);
+        }
+
         else if(context.Request.QueryString.Count > 0)
         {
             await RequestGetAllFilteredProducts(context, filter);
         }
 
-        else if (int.TryParse(useridstr, out int userid))
-        {
-            await RequestGetAllByUserId(context, userid);
-        }
 
         else
         {

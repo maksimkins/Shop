@@ -29,6 +29,10 @@
             <v_page:ProductInfoView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm_page:MyProductsViewModel}">
+            <v_page:MyProductsView/>
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type vm_page:UserInfoViewModel}">
             <v_page:UserInfoView/>
         </DataTemplate>

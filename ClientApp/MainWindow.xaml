@@ -79,7 +79,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Style="{StaticResource btn_base}">
+                    <Button Style="{StaticResource btn_base}" Command="{Binding MyProductsCommand}">
                         <StackPanel>
                             <Image Style="{StaticResource btm_nav_icon}" Source="Images/Icons/file.png"/>
                             <TextBlock Style="{StaticResource nav_help}">My products</TextBlock>
