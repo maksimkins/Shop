@@ -30,7 +30,14 @@ public class ChangePasswordViewModel : ViewModelBase
     public string? ErrorMessage
     {
         get => errorMessage;
-        set => base.PropertyChangeMethod(out password, value);
+        set => base.PropertyChangeMethod(out errorMessage, value);
+    }
+
+    private string? successMessage;
+    public string? SuccessMessage
+    {
+        get => successMessage;
+        set => base.PropertyChangeMethod(out successMessage, value);
     }
 
     #endregion
@@ -53,6 +60,7 @@ public class ChangePasswordViewModel : ViewModelBase
             execute: async () => {
                 if (string.IsNullOrEmpty(Password))
                 {
+                    SuccessMessage = string.Empty;
                     ErrorMessage = "Invalid password!";
                     return;
                 }
@@ -68,11 +76,13 @@ public class ChangePasswordViewModel : ViewModelBase
 
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    Console.WriteLine("tEST");
+                    SuccessMessage = string.Empty;
                     ErrorMessage = "Cannot create product!";
                     return;
                 }
-                Console.WriteLine(await response.Content.ReadAsStringAsync());
+
+                App.Container.GetInstance<User>().Password = this.Password;
+                SuccessMessage = "Password was successfully changed!";
 
             },
             canExecute: () => true);
@@ -83,9 +93,9 @@ public class ChangePasswordViewModel : ViewModelBase
     #region Methods
     public override void RefreshViewModel()
     {
-        Console.WriteLine("TEST");
         this.Password = App.Container.GetInstance<User>().Password;
         this.ErrorMessage = string.Empty;
+        this.SuccessMessage = string.Empty;
     }
 
     #endregion
