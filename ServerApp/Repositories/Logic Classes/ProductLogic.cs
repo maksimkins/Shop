@@ -52,7 +52,7 @@ public class ProductLogic
 
         return productRepository.GetAll().Where(delegate(Product p) 
         {
-            return p.Title == (filter.Title ?? p.Title) &&
+            return p.Title.Contains(filter.Title ?? p.Title) &&
             p.Text == (filter.Text ?? p.Text) &&
             p.Price >= (filter.PriceFrom ?? p.Price) &&
             p.Price <= (filter.PriceTo ?? p.Price);

@@ -37,8 +37,8 @@ public class HomeViewModel : ViewModelBase
         set => base.PropertyChangeMethod(out selectedIndex, value);
     }
 
-    private string titleToSearch;
-    public string TitleToSearch
+    private string? titleToSearch;
+    public string? TitleToSearch
     {
         get => titleToSearch;
         set => base.PropertyChangeMethod(out titleToSearch, value);
