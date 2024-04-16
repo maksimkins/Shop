@@ -1,5 +1,5 @@
 # Shop
-repository owner: makedoniaz!!!!!!
+repository owner: maksimkins!!!!!!
 
 Sovmestniy proekt s maxom
-elinocka smack that
+smackmaasssss
