@@ -1,5 +1,5 @@
 # Shop
 repository owner: maksimkins!!!!!!
 
-Sovmestniy proekt s maxom
+Sovmestniy proekt s makedoniaz
 smackmaasssss
